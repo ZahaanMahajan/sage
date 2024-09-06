@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "286896401355",
+    "project_id": "sage-4bcde",
+    "storage_bucket": "sage-4bcde.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:286896401355:android:d83ed882191be27353e44e",
+        "android_client_info": {
+          "package_name": "com.iot.sage"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnPdDrMNZ5qXB8wTuiL1EKFIRTVGx8-pE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
