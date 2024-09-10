@@ -30,7 +30,13 @@ class HomeView extends StatelessWidget {
             ),
           ]),
           body: const Center(
-            child: Text("Home"),
+            child: Text(
+              "Home",
+              style: TextStyle(
+                fontSize: 42,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
           ),
         );
       },

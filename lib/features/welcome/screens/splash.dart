@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sage_app/features/auth/invite/view/invite_code_screen.dart';
+import 'package:sage_app/features/home/screens/home_screen.dart';
 //import 'package:sage_app/features/home/home.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -14,18 +16,30 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _navigateToHomePage();
+    _checkSignStatus();
   }
 
-  Future<void> _navigateToHomePage() async {
+  Future<void> _checkSignStatus() async {
     await Future.delayed(const Duration(milliseconds: 1500));
-    if (mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const InviteCodeScreen(),
-        ),
-      );
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const InviteCodeScreen(),
+          ),
+        );
+      }
+    } else {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomeScreen(),
+          ),
+        );
+      }
     }
   }
 
@@ -33,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return const CupertinoPageScaffold(
       child: CupertinoActivityIndicator(
-        color: Colors.grey,
+        color: Colors.black,
       ),
     );
   }

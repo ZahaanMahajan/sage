@@ -7,6 +7,7 @@ class AuthRepository {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  /*---------------------- Check Invite Code ----------------------*/
   Future<InviteCodeStatus> checkInviteCode(String inviteCode) async {
     try {
       DocumentSnapshot doc =
@@ -15,8 +16,9 @@ class AuthRepository {
       if (doc.exists) {
         if (doc['uid'] != null) {
           return InviteCodeStatus.userExist;
+        } else {
+          return InviteCodeStatus.valid;
         }
-        return InviteCodeStatus.valid;
       } else {
         return InviteCodeStatus.invalid;
       }
@@ -25,7 +27,7 @@ class AuthRepository {
     }
   }
 
-  /* Function to Sign up User using Firebase Auth*/
+  /*---------------------- Sign up ----------------------*/
   Future<String?> signUpUser(
     String email,
     String username,
@@ -68,6 +70,7 @@ class AuthRepository {
     }
   }
 
+  /*---------------------- Login ----------------------*/
   Future<String?> loginUser(String email, String password) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -95,7 +98,7 @@ class AuthRepository {
     }
   }
 
-  /* Function to link inviteCode with user in Firestore Database */
+  /*---------------------- Link User & Invite Code ----------------------*/
   Future<void> linkUserWithInviteCode(String userID, String inviteCode) async {
     try {
       await _firestore
@@ -107,7 +110,7 @@ class AuthRepository {
     }
   }
 
-  /* Function to save user data in Firestore Database */
+  /*---------------------- Save User Data ----------------------*/
   Future<void> saveUserInDatabase(String userID, String email, String username,
       int age, bool hadCounsellingBefore) async {
     try {
@@ -121,6 +124,15 @@ class AuthRepository {
       });
     } catch (e) {
       throw Exception('Failed to save user in database: $e');
+    }
+  }
+
+  /*---------------- Send Verification Mail --------------------*/
+  Future<void> sendEmailVerificationLink() async {
+    try {
+      await _auth.currentUser?.sendEmailVerification();
+    } catch (e) {
+      throw 'Something went wrong. Please try again.';
     }
   }
 }

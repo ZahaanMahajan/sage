@@ -19,3 +19,7 @@ class SignUpSubmitted extends SignUpEvent {
     required this.inviteCode,
   });
 }
+
+class SendVerificationMail extends SignUpEvent {}
+
+class EmailVerificationChecked extends SignUpEvent {}

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sage_app/core/widgets/custom_textfield.dart';
 import 'package:sage_app/features/auth/signup/bloc/signup_bloc.dart';
-import 'package:sage_app/features/home/screens/home_screen.dart';
+import 'package:sage_app/features/auth/signup/view/verify_email_screen.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key, required this.inviteCode});
@@ -35,7 +35,7 @@ class _SignUpViewState extends State<SignUpView> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const HomeScreen(),
+                    builder: (context) => const VerifyEmailScreen(),
                   ),
                 );
               } else if (state is SignUpFailure) {
