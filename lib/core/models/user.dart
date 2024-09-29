@@ -1,23 +1,51 @@
-import 'package:equatable/equatable.dart';
+class UserSession {
+  static final UserSession _instance = UserSession._internal();
 
-class UserModel extends Equatable {
-  final String age;
-  final String uid;
-  final String email;
-  final String username;
-  final String profession;
-  final bool hadCounsellingBefore;
+  String? age;
+  DateTime? createdAt;
+  String? email;
+  String? gender;
+  bool? hadCounsellingBefore;
+  String? profession;
+  String? uid;
+  String? username;
 
-  const UserModel({
-    required this.age,
-    required this.uid,
-    required this.email,
-    required this.username,
-    required this.profession,
-    required this.hadCounsellingBefore,
-  });
+  // Private constructor
+  UserSession._internal();
 
-  @override
-  List<Object?> get props =>
-      [age, uid, email, username, profession, hadCounsellingBefore];
+  // Singleton instance getter
+  static UserSession get instance => _instance;
+
+  // Function to initialize user data
+  void initialize({
+    required String age,
+    required DateTime createdAt,
+    required String email,
+    required String gender,
+    required bool hadCounsellingBefore,
+    required String profession,
+    required String uid,
+    required String username,
+  }) {
+    this.age = age;
+    this.createdAt = createdAt;
+    this.email = email;
+    this.gender = gender;
+    this.hadCounsellingBefore = hadCounsellingBefore;
+    this.profession = profession;
+    this.uid = uid;
+    this.username = username;
+  }
+
+  // Clear user data (if needed)
+  void clear() {
+    age = null;
+    createdAt = null;
+    email = null;
+    gender = null;
+    hadCounsellingBefore = null;
+    profession = null;
+    uid = null;
+    username = null;
+  }
 }
