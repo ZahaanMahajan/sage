@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sage_app/features/auth/invite/view/invite_code_screen.dart';
+import 'package:sage_app/features/chatbot/screen/chatbot_screen.dart';
 import 'package:sage_app/features/home/bloc/home_bloc.dart';
 
 class HomeView extends StatelessWidget {
@@ -29,14 +30,21 @@ class HomeView extends StatelessWidget {
               ),
             ),
           ]),
-          body: const Center(
-            child: Text(
-              "Home",
-              style: TextStyle(
-                fontSize: 42,
-                fontWeight: FontWeight.w900,
+          body: Column(
+            children: [
+              const SizedBox(width: double.infinity),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            const ChatBotScreen()),
+                  );
+                },
+                child: const Text("Chatbot"),
               ),
-            ),
+            ],
           ),
         );
       },
