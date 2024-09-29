@@ -1,6 +1,6 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sage_app/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'core/app/app.dart';
 
@@ -10,4 +10,4 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
-}
+}  
