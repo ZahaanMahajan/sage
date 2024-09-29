@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sage_app/features/auth/signup/bloc/signup_bloc.dart';
+import 'package:sage_app/features/home/screens/home_screen.dart';
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});
@@ -17,7 +18,13 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
       body: BlocConsumer<SignUpBloc, SignUpState>(
         listener: (context, state) {
           if (state is EmailVerificationSuccess) {
-            const SnackBar(content: Text(''));
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => const HomeScreen(),
+                ),
+                (Route<dynamic> route) => false);
+            const SnackBar(content: Text('User verified successfully'));
           }
         },
         builder: (context, state) {
