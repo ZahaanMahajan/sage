@@ -1,16 +1,9 @@
 part of 'chatbot_bloc.dart';
 
-@immutable
-sealed class ChatBotEvent {}
+abstract class ChatBotEvent {}
 
-class SendMessage extends ChatBotEvent {
-  final String message;
+class SendMessageEvent extends ChatBotEvent {
+  final ChatMessage message;
 
-  SendMessage({required this.message});
-}
-
-class ReceiveMessage extends ChatBotEvent {
-  final List<ChatCompletionModel> completions;
-
-  ReceiveMessage({required this.completions});
+  SendMessageEvent(this.message);
 }

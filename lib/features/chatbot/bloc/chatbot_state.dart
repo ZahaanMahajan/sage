@@ -1,20 +1,38 @@
 part of 'chatbot_bloc.dart';
 
-@immutable
-sealed class ChatBotState {}
+abstract class ChatBotState {}
 
-final class ChatBotInitial extends ChatBotState {}
+class ChatInitialState extends ChatBotState {}
 
-class ChatBotLoading extends ChatBotState {}
+class ChatLoadingState extends ChatBotState {}
 
-class ChatBotSuccess extends ChatBotState {
-  final List<ChatCompletionModel> messages;
+class ChatLoadedState extends ChatBotState {
+  final List<ChatMessage> messages;
+  final List<ChatUser> typingUsers;
+  final bool showWarning;
 
-  ChatBotSuccess({required this.messages});
+  ChatLoadedState(this.messages, {
+    this.typingUsers = const [],
+    this.showWarning = false,
+  });
+
+  List<Object> get props => [messages, typingUsers, showWarning];
+
+  ChatLoadedState copyWith({
+    List<ChatMessage>? messages,
+    List<ChatUser>? typingUsers,
+    bool? showWarning,
+  }) {
+    return ChatLoadedState(
+      messages ?? this.messages,
+      typingUsers: typingUsers ?? this.typingUsers,
+      showWarning: showWarning ?? this.showWarning,
+    );
+  }
 }
 
-class ChatBotFailure extends ChatBotState {
+class ChatErrorState extends ChatBotState {
   final String error;
 
-  ChatBotFailure({required this.error});
+  ChatErrorState(this.error);
 }

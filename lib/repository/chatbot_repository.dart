@@ -1,127 +1,44 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:sage_app/core/constants/api_urls.dart';
-import 'package:sage_app/core/models/custom_error.dart';
-import 'package:sage_app/core/models/open_ai_completions.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
+import 'package:dash_chat_2/dash_chat_2.dart';
+import 'package:sage_app/core/constants/constants.dart';
 
 class ChatBotRepository {
-  /*Future<List<OpenAIModel>> getModels() async {
-    const storage = FlutterSecureStorage();
-    String? apiKey = await storage.read(key: 'API_KEY');
+  final OpenAI _openAI;
 
-    try {
-      var response = await http.get(Uri.parse(APIUrls.modelUrl), headers: {
-        'Authorization': 'Bearer $apiKey',
-      });
+  ChatBotRepository(this._openAI);
 
-      Map jsonResponse = json.decode(response.body);
-      if (jsonResponse['error'] != null) {
-        throw http.ClientException(jsonResponse['error']['message']);
-      }
-      List models = [];
-      for (var value in jsonResponse['data']) {
-        models.add(value);
-      }
-      print(models);
-      return OpenAIModel.toModelList(models);
-    } on CustomError catch (e) {
-      throw CustomError(errorMsg: e.errorMsg, code: e.code, plugin: e.plugin);
+  Future<List<ChatMessage>> getChatResponse(List<ChatMessage> messages,
+      ChatUser user, ChatUser sage) async {
+    List<Map<String, dynamic>> messagesHistory = [
+      {'role': 'system', 'content': AppConstants.counselorPersona},
+      ...messages.map((m) {
+        return {
+          'role': m.user.id == user.id ? 'user' : 'assistant',
+          'content': m.text,
+        };
+      })
+          .toList()
+          .reversed,
+    ];
+
+    final request = ChatCompleteText(
+      model: GptTurboChatModel(),
+      messages: messagesHistory,
+      maxToken: 1000,
+    );
+
+    final response = await _openAI.onChatCompletion(request: request);
+
+    if (response == null || response.choices.isEmpty) {
+      throw Exception('Failed to get response from API');
     }
-  }*/
 
-  // fetch OpenAICompletion
-  /*static Future<List<OpenAICompletion>> getCompletion({
-    required String text,
-    required String model,
-  }) async {
-    print('text:$text, model: $model');
-    const storage = FlutterSecureStorage();
-    String? apiKey = await storage.read(key: 'API_KEY');
-
-    try {
-      var response = await http.post(
-        Uri.parse(APIUrls.completionUrl),
-        headers: {
-          'Authorization': 'Bearer $apiKey',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          "model": model,
-          "prompt": text,
-          "max_tokens": 1000,
-        }),
+    return response.choices.map((choice) {
+      return ChatMessage(
+        user: sage,
+        createdAt: DateTime.now(),
+        text: choice.message?.content ?? '',
       );
-      Map jsonResponse = json.decode(response.body);
-      if (jsonResponse['error'] != null) {
-        throw http.ClientException(jsonResponse['error']['message']);
-      }
-      List<OpenAICompletion> completions = [];
-
-      if (jsonResponse['choices'].length > 0) {
-        completions = List.generate(
-          jsonResponse['choices'].length,
-          (index) => OpenAICompletion(
-            id: jsonResponse['id'],
-            text: jsonResponse['choices'][index]['text'],
-          ),
-        ).toList();
-
-        print('RESPONSE: ${jsonResponse['choices'][0]['text']}');
-      }
-      return completions;
-    } on CustomError catch (e) {
-      print(e.errorMsg);
-      throw CustomError(errorMsg: e.errorMsg, code: e.code, plugin: e.plugin);
-    }
-  }*/
-
-  // fetch OpenAIChat
-  static Future<List<ChatCompletionModel>> getChat({
-    required String text,
-    required String model,
-  }) async {
-    print('text:$text, model: $model');
-    const storage = FlutterSecureStorage();
-    String? apiKey = await storage.read(key: 'API_KEY');
-    print('API KEY: $apiKey');
-
-    try {
-      var response = await http.post(
-        Uri.parse(APIUrls.chatUrl),
-        headers: {
-          'Authorization': 'Bearer $apiKey',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          "model": model,
-          "messages": [
-            {"role": "user", "content": text}
-          ],
-          "max_tokens": 1000,
-        }),
-      );
-      Map jsonResponse = json.decode(response.body);
-      if (jsonResponse['error'] != null) {
-        throw http.ClientException(jsonResponse['error']['message']);
-      }
-      List<ChatCompletionModel> completions = [];
-
-      if (jsonResponse['choices'].length > 0) {
-        completions = List.generate(
-          jsonResponse['choices'].length,
-          (index) => ChatCompletionModel(
-            id: jsonResponse['id'],
-            text: jsonResponse['choices'][index]['message']['content'],
-          ),
-        ).toList();
-
-        print('RESPONSE: ${jsonResponse['choices'][0]['message']['content']}');
-      }
-      return completions;
-    } on CustomError catch (e) {
-      print(e.errorMsg);
-      throw CustomError(errorMsg: e.errorMsg, code: e.code, plugin: e.plugin);
-    }
+    }).toList();
   }
 }
