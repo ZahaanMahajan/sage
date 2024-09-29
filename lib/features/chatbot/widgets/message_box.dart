@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class MessageBox extends StatelessWidget {
   const MessageBox({
-    super.key,
     required this.textController,
     required this.generateResponse,
     required this.isTyping,
+    super.key,
   });
 
   final TextEditingController textController;
@@ -21,19 +21,28 @@ class MessageBox extends StatelessWidget {
       onSubmitted: (value) => isTyping ? null : generateResponse(),
       style: const TextStyle(color: Colors.black),
       decoration: InputDecoration(
-        hintText: 'Send a message',
+        hintText: 'Send a message...',
         hintStyle: const TextStyle(color: Colors.grey),
         suffixIcon: GestureDetector(
           onTap: () => isTyping ? null : generateResponse(),
           child: const Icon(
-            color: Colors.black,
             Icons.send,
+            color: Colors.black,
           ),
         ),
-        border: const OutlineInputBorder(borderSide: BorderSide.none),
-        focusedBorder: const OutlineInputBorder(borderSide: BorderSide.none),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0),
+          borderSide: const BorderSide(color: Colors.grey),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0),
+          borderSide: const BorderSide(color: Colors.red),
         ),
       ),
     );

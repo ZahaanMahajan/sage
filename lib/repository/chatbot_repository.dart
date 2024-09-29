@@ -31,7 +31,7 @@ class ChatBotRepository {
   }*/
 
   // fetch OpenAICompletion
-  static Future<List<OpenAICompletion>> getCompletion({
+  /*static Future<List<OpenAICompletion>> getCompletion({
     required String text,
     required String model,
   }) async {
@@ -74,16 +74,17 @@ class ChatBotRepository {
       print(e.errorMsg);
       throw CustomError(errorMsg: e.errorMsg, code: e.code, plugin: e.plugin);
     }
-  }
+  }*/
 
   // fetch OpenAIChat
-  static Future<List<OpenAICompletion>> getChat({
+  static Future<List<ChatCompletionModel>> getChat({
     required String text,
     required String model,
   }) async {
     print('text:$text, model: $model');
     const storage = FlutterSecureStorage();
     String? apiKey = await storage.read(key: 'API_KEY');
+    print('API KEY: $apiKey');
 
     try {
       var response = await http.post(
@@ -104,12 +105,12 @@ class ChatBotRepository {
       if (jsonResponse['error'] != null) {
         throw http.ClientException(jsonResponse['error']['message']);
       }
-      List<OpenAICompletion> completions = [];
+      List<ChatCompletionModel> completions = [];
 
       if (jsonResponse['choices'].length > 0) {
         completions = List.generate(
           jsonResponse['choices'].length,
-          (index) => OpenAICompletion(
+          (index) => ChatCompletionModel(
             id: jsonResponse['id'],
             text: jsonResponse['choices'][index]['message']['content'],
           ),
