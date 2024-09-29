@@ -63,8 +63,9 @@ class _ChatViewState extends State<ChatView> {
               },
               user: context.read<ConversationBloc>().user,
               onEndReached: () async {
-                final bloc = context.read<ConversationBloc>();
-                bloc.add(LoadMoreChats(chatRoomid: bloc.chatRoomId));
+                context
+                    .read<ConversationBloc>()
+                    .add(LoadMoreChats(chatRoomid: widget.chatRoomId));
               },
             ),
           );
