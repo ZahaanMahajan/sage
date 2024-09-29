@@ -1,11 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sage_app/repository/auth_repository.dart';
 
 part 'signup_event.dart';
+
 part 'signup_state.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
@@ -30,6 +30,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
 
       if (userID != null) {
         await AuthRepository().linkUserWithInviteCode(userID, event.inviteCode);
+        await AuthRepository().saveDataToProfile(event.inviteCode, userID);
       } else {
         emit(SignUpFailure('Something went wrong. Please try again.'));
       }

@@ -3,3 +3,13 @@ enum InviteCodeStatus {
   valid,
   invalid,
 }
+
+enum OperationType {
+  completion,
+   chat,
+}
+
+enum Status{
+  success,
+  error,
+}

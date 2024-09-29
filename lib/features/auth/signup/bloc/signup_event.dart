@@ -22,4 +22,6 @@ class SignUpSubmitted extends SignUpEvent {
 
 class SendVerificationMail extends SignUpEvent {}
 
+class SaveDataToProfile extends SignUpEvent {}
+
 class EmailVerificationChecked extends SignUpEvent {}

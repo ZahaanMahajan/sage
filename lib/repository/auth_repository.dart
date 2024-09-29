@@ -111,8 +111,13 @@ class AuthRepository {
   }
 
   /*---------------------- Save User Data ----------------------*/
-  Future<void> saveUserInDatabase(String userID, String email, String username,
-      int age, bool hadCounsellingBefore) async {
+  Future<void> saveUserInDatabase(
+    String userID,
+    String email,
+    String username,
+    int age,
+    bool hadCounsellingBefore,
+  ) async {
     try {
       await _firestore.collection('users').doc(userID).set({
         'age': age,
@@ -133,6 +138,28 @@ class AuthRepository {
       await _auth.currentUser?.sendEmailVerification();
     } catch (e) {
       throw 'Something went wrong. Please try again.';
+    }
+  }
+
+  Future<void> saveDataToProfile(String inviteCode, String userID) async {
+    try {
+      String profession = '';
+      String gender = '';
+      final documentSnapshot =
+          await _firestore.collection('invitation_code').doc(inviteCode).get();
+      if (documentSnapshot.exists) {
+        final data = documentSnapshot.data();
+        if (data != null) {
+          profession = data['profession'];
+          gender = data['gender'];
+        }
+      }
+      await _firestore.collection('users').doc(userID).update({
+        'profession': profession,
+        'gender': gender,
+      });
+    } catch (e) {
+      throw 'Failed to save user data';
     }
   }
 }
