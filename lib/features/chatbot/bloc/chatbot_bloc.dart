@@ -1,82 +1,47 @@
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:dash_chat_2/dash_chat_2.dart';
+import 'package:sage_app/repository/chatbot_repository.dart';
 
 part 'chatbot_event.dart';
+
 part 'chatbot_state.dart';
 
 class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
-  ChatBotBloc() : super(ChatBotInitial()) {
-    on<ChatBotEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+  final ChatBotRepository chatRepository;
+  final ChatUser user;
+  final ChatUser sage;
+  List<ChatMessage> messages = [];
 
-  }
-}
-
-/*
-
-OpenAiCompletionsCubit({required this.apiRepository})
-      : super(OpenAiCompletionsState.initial());
-
-  // set current message
-  void setCurrentMessage(String text) {
-    emit(state.copyWith(currentMessage: text));
+  ChatBotBloc(this.chatRepository, this.user, this.sage)
+      : super(ChatLoadedState([])) {
+    on<SendMessageEvent>(_onSendMessage);
   }
 
-  // set completion
-  void setCompletion({required List<OpenAICompletion> completions}) {
-    List<OpenAICompletion> newCompletions = state.completions;
-    newCompletions.addAll(completions);
-    emit(state.copyWith(completions: newCompletions));
-  }
+  Future<void> _onSendMessage(
+      SendMessageEvent event, Emitter<ChatBotState> emit) async {
+    // Add user message to the list
+    messages.insert(0, event.message);
+    emit(ChatLoadedState(messages, typingUsers: [sage]));
 
-  // set chat
-  void setChats({required List<OpenAICompletion> chats}) {
-    List<OpenAICompletion> newChats = state.chats;
-    newChats.addAll(chats);
-    emit(state.copyWith(chats: newChats));
-  }
-
-  // toggle isLiked
-  void toggleCompletionIsLike({
-    required String id,
-    required bool value,
-    required OperationType operationType,
-  }) {
-    List<OpenAICompletion> newList = [];
-    switch (operationType) {
-      case OperationType.completion:
-        newList = state.completions.map((OpenAICompletion completion) {
-          if (completion.id == id) {
-            return OpenAICompletion(
-              id: completion.id,
-              text: completion.text,
-              isLiked: value,
-              isUser: false,
-            );
-          }
-          return completion;
-        }).toList();
-        emit(state.copyWith(completions: newList));
-        break;
-
-      case OperationType.chat:
-        newList = state.chats.map((OpenAICompletion chat) {
-          if (chat.id == id) {
-            return OpenAICompletion(
-              id: chat.id,
-              text: chat.text,
-              isLiked: value,
-              isUser: false,
-            );
-          }
-          return chat;
-        }).toList();
-        print(newList);
-        emit(state.copyWith(chats: newList));
-        break;
+    try {
+      final responses =
+          await chatRepository.getChatResponse(messages, user, sage);
+      bool hasSensitiveContent = _checkForSensitiveContent(messages);
+      // Add bot responses to the list
+      messages.insertAll(0, responses);
+      emit(ChatLoadedState(messages, showWarning: hasSensitiveContent));
+    } catch (e) {
+      emit(ChatErrorState(e.toString()));
+      emit(ChatLoadedState(messages));
     }
   }
 
-
-*/
+  bool _checkForSensitiveContent(List<ChatMessage> messages) {
+    List<String> sensitiveKeywords = ['suicide', 'self harm', 'abuse', 'end life', 'kill'];
+    return messages.any(
+      (message) => sensitiveKeywords.any(
+        (keyword) => message.text.toLowerCase().contains(keyword),
+      ),
+    );
+  }
+}
