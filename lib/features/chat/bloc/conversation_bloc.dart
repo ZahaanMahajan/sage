@@ -13,8 +13,8 @@ part 'conversation_event.dart';
 part 'conversation_state.dart';
 
 class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
-  final List<types.Message> messages = [];
-  final Set<String> messageIds = {}; // Store unique message IDs
+  List<types.Message> messages = [];
+  Set<String> messageIds = {}; // Store unique message IDs
   String chatRoomId = '';
   final ChatRepository chatRepository = ChatRepository();
   final user = types.User(id: FirebaseAuth.instance.currentUser!.uid);
@@ -45,7 +45,6 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       emit(ChatRoomLoadingError());
     }, (right) {
       log(right.toString());
-      emit(ConversationLoaded());
     });
   }
 
@@ -55,44 +54,46 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     emit(ConversationLoading());
 
     try {
+      messages = [];
       chatRoomId = event.chatRoomid;
 
       // Fetch initial messages
       final initialMessages = await chatRepository.fetchInitialMessages(
         chatRoomId: event.chatRoomid,
-        limit: 10,
+        limit: 12,
       );
 
       log('Initial messages: $initialMessages');
 
       // Add only new unique messages
-      for (var message in initialMessages.reversed) {
+      for (var message in initialMessages['messages']) {
         if (!messageIds.contains(message.id)) {
           messages.add(message);
           messageIds.add(message.id);
         }
       }
 
+      lastDocument = initialMessages['lastDoc'];
+
       // Stream new messages in real-time
       _messageSubscription = chatRepository
           .streamMessages(chatRoomId: event.chatRoomid)
           .listen((newMessages) {
-        addNewMessages(newMessages);
+        for (var message in newMessages) {
+          if (!messageIds.contains(message.id)) {
+            messages.add(message);
+            messageIds.add(message.id);
+            log('message is :$message');
+            log('message length is : ${messages.length}');
+          }
+          emit(ConversationLoaded());
+        }
       });
+      log('out of the stream');
       emit(ConversationLoaded());
     } catch (e) {
       emit(ChatRoomLoadingError());
       log('Error while getting initial messages: $e');
-    }
-  }
-
-  // Add new messages from the stream
-  void addNewMessages(List<types.Message> newMessages) {
-    for (var message in newMessages) {
-      if (!messageIds.contains(message.id)) {
-        messages.insert(0, message);
-        messageIds.add(message.id);
-      }
     }
   }
 
@@ -106,7 +107,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       LoadMoreChats event, Emitter<ConversationState> emit) async {
     if (lastDocument != null) {
       final result = await chatRepository.fetchMoreMessages(
-        chatRoomId: chatRoomId,
+        chatRoomId: event.chatRoomid,
         lastDocument: lastDocument!,
         limit: 10,
       );
@@ -115,8 +116,9 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       lastDocument = result['lastDoc'] as DocumentSnapshot?;
 
       // Add only new unique messages
-      for (var message in olderMessages.reversed) {
+      for (var message in olderMessages) {
         if (!messageIds.contains(message.id)) {
+          log(message.toString());
           messages.add(message);
           messageIds.add(message.id);
         }

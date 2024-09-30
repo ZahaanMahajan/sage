@@ -30,19 +30,24 @@ class ChatRepository {
     }
   }
 
-// Fetch initial messages with chat_room_id and pagination
-  Future<List<types.Message>> fetchInitialMessages({
+  Future<Map<String, dynamic>> fetchInitialMessages({
     required String chatRoomId,
     required int limit,
   }) async {
     final snapshot = await _firestore
         .collection('messages')
         .where('chat_room_id', isEqualTo: chatRoomId)
-        .orderBy('created_at', descending: false)
+        .orderBy('created_at', descending: true)
         .limit(limit)
         .get();
 
-    return snapshot.docs.map((doc) => _mapDocumentToMessage(doc)).toList();
+    final messages =
+        snapshot.docs.map((doc) => _mapDocumentToMessage(doc)).toList();
+
+    return {
+      'messages': messages,
+      'lastDoc': snapshot.docs.isNotEmpty ? snapshot.docs.last : null,
+    };
   }
 
   // Stream new messages with chat_room_id
