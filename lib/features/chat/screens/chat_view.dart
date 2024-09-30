@@ -21,6 +21,9 @@ class _ChatViewState extends State<ChatView> {
   @override
   void initState() {
     super.initState();
+    context.read<ConversationBloc>().messages = [];
+    context.read<ConversationBloc>().lastDocument = null;
+    context.read<ConversationBloc>().messageIds = {};
     context
         .read<ConversationBloc>()
         .add(GetInitialMessages(chatRoomid: widget.chatRoomId));
@@ -63,6 +66,7 @@ class _ChatViewState extends State<ChatView> {
               },
               user: context.read<ConversationBloc>().user,
               onEndReached: () async {
+                print('Ebd');
                 context
                     .read<ConversationBloc>()
                     .add(LoadMoreChats(chatRoomid: widget.chatRoomId));
