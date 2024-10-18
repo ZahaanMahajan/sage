@@ -1,8 +1,6 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:sage_app/features/chat/bloc/conversation_bloc.dart';
@@ -10,7 +8,6 @@ import 'package:sage_app/features/chat/widgets/custom_chat_input.dart';
 
 class ChatView extends StatefulWidget {
   const ChatView({super.key, required this.chatRoomId});
-
   final String chatRoomId;
 
   @override
@@ -18,6 +15,8 @@ class ChatView extends StatefulWidget {
 }
 
 class _ChatViewState extends State<ChatView> {
+  bool _isLoadingMore = false;
+
   @override
   void initState() {
     super.initState();
@@ -29,9 +28,27 @@ class _ChatViewState extends State<ChatView> {
         .add(GetInitialMessages(chatRoomid: widget.chatRoomId));
   }
 
+  Future<void> _loadMoreMessages() async {
+    if (!_isLoadingMore) {
+      // setState(() {
+      //   _isLoadingMore = true;
+      // });
+      context
+          .read<ConversationBloc>()
+          .add(LoadMoreChats(chatRoomid: widget.chatRoomId));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ConversationBloc, ConversationState>(
+    return BlocConsumer<ConversationBloc, ConversationState>(
+      listener: (context, state) {
+        if (state is ConversationLoaded && _isLoadingMore) {
+          // setState(() {
+          //   _isLoadingMore = false;
+          // });
+        }
+      },
       builder: (context, state) {
         log('State is : $state');
         if (state is ConversationLoading) {
@@ -41,40 +58,48 @@ class _ChatViewState extends State<ChatView> {
             ),
           );
         }
-
         if (state is ChatRoomLoadingError) {
           return const Scaffold(
-            body: Center(child: Text('Coun\'t find chat...!')),
+            body: Center(child: Text('Couldn\'t find chat...!')),
           );
         }
         if (state is ConversationLoaded) {
-          final messages = context.read<ConversationBloc>().messages;
-
           return Scaffold(
-            body: Chat(
-              messages: messages,
-              showUserAvatars: true,
-              customBottomWidget: CustomChatInput(
-                onSendPressed: (types.PartialText message) {
-                  context
-                      .read<ConversationBloc>()
-                      .add(SendMessage(message.text));
-                },
-              ),
-              onSendPressed: (types.PartialText message) {
-                context.read<ConversationBloc>().add(SendMessage(message.text));
-              },
-              user: context.read<ConversationBloc>().user,
-              onEndReached: () async {
-                print('Ebd');
-                context
-                    .read<ConversationBloc>()
-                    .add(LoadMoreChats(chatRoomid: widget.chatRoomId));
+            body: StreamBuilder<List<types.Message>>(
+              stream: context.read<ConversationBloc>().messageStream,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('No messages yet'));
+                }
+                final messages = snapshot.data!;
+                return Chat(
+                  messages: messages,
+                  showUserAvatars: true,
+                  customBottomWidget: CustomChatInput(
+                    onSendPressed: (types.PartialText message) {
+                      context
+                          .read<ConversationBloc>()
+                          .add(SendMessage(message.text));
+                    },
+                  ),
+                  onSendPressed: (types.PartialText message) {
+                    context
+                        .read<ConversationBloc>()
+                        .add(SendMessage(message.text));
+                  },
+                  user: context.read<ConversationBloc>().user,
+                  onEndReached: _loadMoreMessages,
+                );
               },
             ),
           );
         }
-
         return const Scaffold(
           body: Center(child: Text('Internal error...!')),
         );
