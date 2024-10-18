@@ -28,6 +28,9 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     on<LoadMoreChats>(_loadMoreChats);
   }
 
+  Stream<List<types.Message>> get messageStream =>
+      chatRepository.streamMessages(chatRoomId: chatRoomId);
+
   Future<void> _onSendMessage(
     SendMessage event,
     Emitter<ConversationState> emit,
@@ -76,19 +79,19 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       lastDocument = initialMessages['lastDoc'];
 
       // Stream new messages in real-time
-      _messageSubscription = chatRepository
-          .streamMessages(chatRoomId: event.chatRoomid)
-          .listen((newMessages) {
-        for (var message in newMessages) {
-          if (!messageIds.contains(message.id)) {
-            messages.add(message);
-            messageIds.add(message.id);
-            log('message is :$message');
-            log('message length is : ${messages.length}');
-          }
-          emit(ConversationLoaded());
-        }
-      });
+      // _messageSubscription = chatRepository
+      //     .streamMessages(chatRoomId: event.chatRoomid)
+      //     .listen((newMessages) {
+      //   for (var message in newMessages) {
+      //     if (!messageIds.contains(message.id)) {
+      //       messages.add(message);
+      //       messageIds.add(message.id);
+      //       log('message is :$message');
+      //       log('message length is : ${messages.length}');
+      //     }
+      //     emit(ConversationLoaded());
+      //   }
+      // });
       log('out of the stream');
       emit(ConversationLoaded());
     } catch (e) {
@@ -123,7 +126,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
           messageIds.add(message.id);
         }
       }
-      emit(ConversationLoaded());
+      // emit(ConversationLoaded());
     }
   }
 }
