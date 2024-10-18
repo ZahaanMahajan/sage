@@ -3,6 +3,7 @@ import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sage_app/core/constants/constants.dart';
+import 'package:sage_app/core/models/user.dart';
 import 'package:sage_app/features/chatbot/bloc/chatbot_bloc.dart';
 import 'package:sage_app/repository/chatbot_repository.dart';
 
@@ -17,16 +18,21 @@ class ChatBotScreen extends StatelessWidget {
       create: (context) => ChatBotRepository(
         OpenAI.instance.build(
           token: AppConstants.apiKey,
-          baseOption: HttpSetup(receiveTimeout: const Duration(seconds: 5)),
+          baseOption: HttpSetup(
+            receiveTimeout: const Duration(seconds: 5),
+          ),
           enableLog: true,
         ),
       ),
       child: BlocProvider(
         create: (context) => ChatBotBloc(
           context.read<ChatBotRepository>(),
-          ChatUser(id: '1', firstName: 'Zahaan', lastName: 'Javaid'),
-          ChatUser(id: '2', firstName: 'Sage'),
-        ),
+          ChatUser(
+              id: '${UserSession.instance.uid}',
+              firstName: 'Zahaan',
+              lastName: 'Javaid'),
+          ChatUser(id: 'sage_id', firstName: 'Sage'),
+        )..add(ChatStartedEvent()),
         child: const ChatBotView(),
       ),
     );

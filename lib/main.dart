@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 import 'package:sage_app/core/utils/config.dart';
 import 'package:sage_app/firebase_options.dart';
-
+import 'package:flutter/material.dart';
 import 'core/app/app.dart';
 
 void main() async {
@@ -16,7 +15,7 @@ void main() async {
 }
 
 Future<void> fetchData() async {
-  final uid = FirebaseAuth.instance.currentUser!.uid;
+  final uid = FirebaseAuth.instance.currentUser?.uid ?? '';
   await Config.fetchApiKey();
   await Config.fetchAndStoreUserData(uid);
 }
