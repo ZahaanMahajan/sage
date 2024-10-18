@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sage_app/core/models/user.dart';
@@ -8,7 +10,7 @@ class Config {
     const storage = FlutterSecureStorage();
     await storage.write(key: 'API_KEY', value: key);
     String? apiKey = await storage.read(key: 'API_KEY');
-    print('API KEY: $apiKey');
+    log('API KEY: $apiKey');
   }
 
   static Future<void> fetchAndStoreUserData(String uid) async {
@@ -34,14 +36,13 @@ class Config {
             username: data['username'],
           );
 
-          print(
-              'User session initialized with username: ${UserSession.instance.username}');
+          log('User session initialized with username: ${UserSession.instance.username}');
         }
       } else {
-        print('Document does not exist.');
+        log('Document does not exist.');
       }
     } catch (e) {
-      print('Error fetching user data: $e');
+      log('Error fetching user data: $e');
     }
   }
 }
