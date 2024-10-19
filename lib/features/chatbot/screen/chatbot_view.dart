@@ -1,5 +1,5 @@
-import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
+import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sage_app/core/widgets/floating_snack_bar.dart';
 import 'package:sage_app/features/chatbot/bloc/chatbot_bloc.dart';

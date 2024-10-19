@@ -16,30 +16,35 @@ class Config {
   static Future<void> fetchAndStoreUserData(String uid) async {
     try {
       // Fetch the user document from Firestore
-      DocumentSnapshot documentSnapshot =
-          await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
-      if (documentSnapshot.exists) {
-        Map<String, dynamic>? data =
-            documentSnapshot.data() as Map<String, dynamic>?;
+      if (uid.isNotEmpty) {
+        DocumentSnapshot documentSnapshot =
+            await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
-        if (data != null) {
-          // Extract the fields from Firestore and initialize UserSession
-          UserSession.instance.initialize(
-            age: data['age'].toString(),
-            createdAt: (data['createdAt'] as Timestamp).toDate(),
-            email: data['email'],
-            gender: data['gender'],
-            hadCounsellingBefore: data['had_counselling_before'],
-            profession: data['profession'],
-            uid: data['uid'],
-            username: data['username'],
-          );
+        if (documentSnapshot.exists) {
+          Map<String, dynamic>? data =
+              documentSnapshot.data() as Map<String, dynamic>?;
 
-          log('User session initialized with username: ${UserSession.instance.username}');
+          if (data != null) {
+            // Extract the fields from Firestore and initialize UserSession
+            UserSession.instance.initialize(
+              age: data['age'].toString(),
+              createdAt: (data['createdAt'] as Timestamp).toDate(),
+              email: data['email'],
+              gender: data['gender'],
+              hadCounsellingBefore: data['had_counselling_before'],
+              profession: data['profession'],
+              uid: data['uid'],
+              username: data['username'],
+            );
+
+            log('User session initialized with username: ${UserSession.instance.username}');
+          }
+        }else{
+          log('No User Document found');
         }
       } else {
-        log('Document does not exist.');
+        log('No User ID found');
       }
     } catch (e) {
       log('Error fetching user data: $e');
