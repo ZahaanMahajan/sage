@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:sage_app/repository/chat_repository.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
@@ -14,7 +12,7 @@ part 'conversation_state.dart';
 
 class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   List<types.Message> messages = [];
-  Set<String> messageIds = {}; // Store unique message IDs
+  Set<String> messageIds = {};
   String chatRoomId = '';
   final ChatRepository chatRepository = ChatRepository();
   final user = types.User(id: FirebaseAuth.instance.currentUser!.uid);
@@ -78,20 +76,6 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
 
       lastDocument = initialMessages['lastDoc'];
 
-      // Stream new messages in real-time
-      // _messageSubscription = chatRepository
-      //     .streamMessages(chatRoomId: event.chatRoomid)
-      //     .listen((newMessages) {
-      //   for (var message in newMessages) {
-      //     if (!messageIds.contains(message.id)) {
-      //       messages.add(message);
-      //       messageIds.add(message.id);
-      //       log('message is :$message');
-      //       log('message length is : ${messages.length}');
-      //     }
-      //     emit(ConversationLoaded());
-      //   }
-      // });
       log('out of the stream');
       emit(ConversationLoaded());
     } catch (e) {
@@ -126,7 +110,6 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
           messageIds.add(message.id);
         }
       }
-      // emit(ConversationLoaded());
     }
   }
 }

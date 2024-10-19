@@ -15,8 +15,6 @@ class ChatView extends StatefulWidget {
 }
 
 class _ChatViewState extends State<ChatView> {
-  bool _isLoadingMore = false;
-
   @override
   void initState() {
     super.initState();
@@ -29,26 +27,15 @@ class _ChatViewState extends State<ChatView> {
   }
 
   Future<void> _loadMoreMessages() async {
-    if (!_isLoadingMore) {
-      // setState(() {
-      //   _isLoadingMore = true;
-      // });
-      context
-          .read<ConversationBloc>()
-          .add(LoadMoreChats(chatRoomid: widget.chatRoomId));
-    }
+    context
+        .read<ConversationBloc>()
+        .add(LoadMoreChats(chatRoomid: widget.chatRoomId));
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ConversationBloc, ConversationState>(
-      listener: (context, state) {
-        if (state is ConversationLoaded && _isLoadingMore) {
-          // setState(() {
-          //   _isLoadingMore = false;
-          // });
-        }
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         log('State is : $state');
         if (state is ConversationLoading) {
@@ -65,6 +52,7 @@ class _ChatViewState extends State<ChatView> {
         }
         if (state is ConversationLoaded) {
           return Scaffold(
+            appBar: AppBar(backgroundColor: Colors.white),
             body: StreamBuilder<List<types.Message>>(
               stream: context.read<ConversationBloc>().messageStream,
               builder: (context, snapshot) {
