@@ -4,46 +4,68 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sage_app/features/auth/signup/bloc/signup_bloc.dart';
 import 'package:sage_app/features/home/screens/home_screen.dart';
 
-class VerifyEmailView extends StatefulWidget {
+class VerifyEmailView extends StatelessWidget {
   const VerifyEmailView({super.key});
 
   @override
-  State<VerifyEmailView> createState() => _VerifyEmailViewState();
-}
-
-class _VerifyEmailViewState extends State<VerifyEmailView> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<SignUpBloc, SignUpState>(
-        listener: (context, state) {
-          if (state is EmailVerificationSuccess) {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => const HomeScreen(),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.teal.shade400,
+              Colors.teal.shade50,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: BlocConsumer<SignUpBloc, SignUpState>(
+          listener: (context, state) {
+            if (state is EmailVerificationSuccess) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const HomeScreen(),
+                  ),
+                  (Route<dynamic> route) => false);
+              const SnackBar(content: Text('User verified successfully'));
+            }
+          },
+          builder: (context, state) {
+            if (state is EmailVerificationPending) {
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Please check your mail for verification.......",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: Colors.teal.shade900,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const CupertinoActivityIndicator(),
+                  ],
                 ),
-                (Route<dynamic> route) => false);
-            const SnackBar(content: Text('User verified successfully'));
-          }
-        },
-        builder: (context, state) {
-          if (state is EmailVerificationPending) {
-            return const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Please check your mail for verification......."),
-                CupertinoActivityIndicator(),
-              ],
-            );
-          }
-          if (state is EmailVerificationFailed) {
-            return const Center(
-              child: Text("Email verification failed."),
-            );
-          }
-          return const SizedBox();
-        },
+              );
+            }
+            if (state is EmailVerificationFailed) {
+              return const Center(
+                child: Text(
+                  "Email verification failed.",
+                ),
+              );
+            }
+            return const SizedBox();
+          },
+        ),
       ),
     );
   }

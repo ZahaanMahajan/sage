@@ -3,6 +3,7 @@ import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:sage_app/repository/chatbot_repository.dart';
 
 part 'chatbot_event.dart';
+
 part 'chatbot_state.dart';
 
 class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
@@ -29,12 +30,11 @@ class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
       final initialMessage = ChatMessage(
         user: sage,
         createdAt: DateTime.now(),
-        text:
-            "Hello there, I'm Sage and I'll support you on your journey towards mental well-being.",
+        text: "Hello there, I'm Sage and I'll support you on"
+            " your journey towards mental well-being.",
       );
       messages.insert(0, initialMessage);
     }
-
     emit(ChatLoadedState(List.from(messages)));
   }
 
@@ -71,7 +71,8 @@ class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
       'self harm',
       'abuse',
       'end life',
-      'kill'
+      'kill',
+      'suicidal',
     ];
     return messages.any(
       (message) => sensitiveKeywords.any(
