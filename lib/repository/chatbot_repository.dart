@@ -24,7 +24,7 @@ class ChatBotRepository {
     ];
 
     final request = ChatCompleteText(
-      model: GptTurboChatModel(),
+      model: Gpt4OChatModel(),
       messages: messagesHistory,
       maxToken: 1000,
     );
