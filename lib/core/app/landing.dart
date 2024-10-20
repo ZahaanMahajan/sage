@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:sage_app/core/constants/string_manager.dart';
-import 'package:sage_app/core/models/user.dart';
-import 'package:sage_app/features/home/screens/home_screen.dart';
 import 'package:sage_app/features/anonymous_chat/screens/anonymous_chat.dart';
+import 'package:sage_app/features/home/screens/home_screen.dart';
+import 'package:sage_app/core/constants/string_manager.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sage_app/core/models/user.dart';
+import 'package:sage_app/core/utils/config.dart';
+import 'package:flutter/material.dart';
 
 class Landing extends StatefulWidget {
   const Landing({super.key});
@@ -14,6 +16,17 @@ class Landing extends StatefulWidget {
 class _LandingState extends State<Landing> {
   int currentIndex = 0;
   final PageController pageController = PageController();
+
+  @override
+  void initState() {
+    fetchUserInformation();
+    super.initState();
+  }
+
+  void fetchUserInformation() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid ?? '';
+    await Config.fetchAndStoreUserData(uid);
+  }
 
   void onTap(int index) {
     pageController.animateToPage(
@@ -69,6 +82,9 @@ class _LandingState extends State<Landing> {
     );
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
+      extendBody: true,
       body: PageView.builder(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
@@ -89,7 +105,7 @@ class _LandingState extends State<Landing> {
         onDestinationSelected: onTap,
         destinations: destinationItems,
         indicatorColor: Colors.transparent,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
       ),
     );

@@ -1,11 +1,11 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:sage_app/features/auth/login/bloc/login_bloc.dart';
-import 'package:sage_app/features/home/screens/home_screen.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:sage_app/core/widgets/custom_button.dart';
 import 'package:sage_app/core/widgets/input_field.dart';
 import 'package:sage_app/core/utils/validators.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sage_app/core/app/landing.dart';
 import 'package:flutter/material.dart';
 
 class LoginView extends StatefulWidget {
@@ -29,8 +29,8 @@ class _LoginViewState extends State<LoginView> {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Colors.teal.shade400,
-                Colors.teal.shade50,
+                Colors.teal.shade200,
+                Colors.white,
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -44,12 +44,15 @@ class _LoginViewState extends State<LoginView> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Login successful!')),
                 );
-                Navigator.pushReplacement(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const HomeScreen(),
+                    builder: (context) => const Landing(),
                   ),
+                  (Route<dynamic> route) => false,
                 );
+              } else if (state is LoginLoading) {
+                progress?.show();
               } else if (state is LoginFailure) {
                 progress?.dismiss();
                 const snackBar = SnackBar(

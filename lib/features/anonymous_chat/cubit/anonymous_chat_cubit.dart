@@ -15,7 +15,7 @@ class AnonymousChatCubit extends Cubit<AnonymousChatState> {
 
       emit(SetRequestFlagToTrueSuccess(chatRoomID: chatRoomId));
     } catch (e) {
-      log('Cubit Erros in setting the chat request flag: $e');
+      log('Cubit Errors in setting the chat request flag: $e');
       emit(SetRequestFlagToTrueError());
     }
   }

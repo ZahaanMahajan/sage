@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sage_app/core/app/landing.dart';
 import 'package:sage_app/features/auth/signup/bloc/signup_bloc.dart';
-import 'package:sage_app/features/home/screens/home_screen.dart';
 
 class VerifyEmailView extends StatelessWidget {
   const VerifyEmailView({super.key});
@@ -14,8 +14,8 @@ class VerifyEmailView extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.teal.shade400,
-              Colors.teal.shade50,
+              Colors.teal.shade200,
+              Colors.white,
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -27,7 +27,7 @@ class VerifyEmailView extends StatelessWidget {
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => const HomeScreen(),
+                    builder: (BuildContext context) => const Landing(),
                   ),
                   (Route<dynamic> route) => false);
               const SnackBar(content: Text('User verified successfully'));

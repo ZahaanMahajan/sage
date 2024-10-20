@@ -29,12 +29,13 @@ class _SignUpViewState extends State<SignUpView> {
   Widget build(BuildContext context) {
     return ProgressHUD(
       child: Scaffold(
+        extendBodyBehindAppBar: true,
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Colors.teal.shade400,
-                Colors.teal.shade50,
+                Colors.teal.shade200,
+                Colors.white,
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -172,52 +173,3 @@ class _SignUpViewState extends State<SignUpView> {
     );
   }
 }
-
-class TextFieldWithTitle extends StatelessWidget {
-  const TextFieldWithTitle({
-    super.key,
-    required this.title,
-    required this.label,
-    required this.controller,
-    this.textInputType,
-  });
-
-  final String title;
-  final String label;
-  final TextEditingController controller;
-  final TextInputType? textInputType;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [],
-    );
-  }
-}
-/*const SizedBox(height: 10),
-Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-    const Row(
-      children: [
-        Text(
-          "Have taken counselling before?",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
-      ],
-    ),
-    DropdownMenu(
-      onSelected: (value) {
-        hadCounsellingBefore = value ?? false;
-      },
-      dropdownMenuEntries: const [
-        DropdownMenuEntry(value: true, label: 'Yes'),
-        DropdownMenuEntry(value: false, label: 'No'),
-      ],
-    ),
-  ],
-),*/

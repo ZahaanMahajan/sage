@@ -4,6 +4,8 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:sage_app/core/models/user.dart';
 
 class AnonymousChatRepository {
   //* =============== Variables  =============== *//
@@ -20,10 +22,15 @@ class AnonymousChatRepository {
 
       if (doc.exists) {
         log('Document exists, updating now...');
+        final teacherToken = await FirebaseMessaging.instance.getToken();
         await FirebaseFirestore.instance
             .collection('chat_room')
             .doc(chatRoomId)
-            .update({'accepted': true});
+            .update({
+          'accepted': true,
+          'teacher_id': '${UserSession.instance.uid}',
+          'teacher_token': teacherToken,
+        });
         log('Request flag set to true for Chat Room ID: $chatRoomId');
       } else {
         log('Document with Chat Room ID $chatRoomId not found.');

@@ -11,7 +11,8 @@ class ChatLoadedState extends ChatBotState {
   final List<ChatUser> typingUsers;
   final bool showWarning;
 
-  ChatLoadedState(this.messages, {
+  ChatLoadedState(
+    this.messages, {
     this.typingUsers = const [],
     this.showWarning = false,
   });
@@ -36,3 +37,9 @@ class ChatErrorState extends ChatBotState {
 
   ChatErrorState(this.error);
 }
+
+class RequestAnonymousChatState extends ChatBotState {}
+
+class RequestAnonymousChatError extends ChatBotState {}
+
+class RequestAnonymousChatSuccess extends ChatBotState {}

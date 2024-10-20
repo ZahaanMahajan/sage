@@ -1,5 +1,12 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:sage_app/core/models/user.dart';
+import 'package:sage_app/features/anonymous_chat/models/chat_room_model.dart';
 import 'package:sage_app/repository/chatbot_repository.dart';
 
 part 'chatbot_event.dart';
@@ -16,6 +23,7 @@ class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
       : super(ChatLoadedState([])) {
     on<ChatStartedEvent>(_onChatStarted);
     on<SendMessageEvent>(_onSendMessage);
+    on<RequestAnonymousChat>(_requestAnonymousChat);
   }
 
   Future<void> _onChatStarted(
@@ -79,5 +87,41 @@ class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
         (keyword) => message.text.toLowerCase().contains(keyword),
       ),
     );
+  }
+
+  FutureOr<void> _requestAnonymousChat(
+      RequestAnonymousChat event, Emitter<ChatBotState> emit) async {
+    emit(ChatLoadingState());
+    try {
+      final studentToken = await FirebaseMessaging.instance.getToken();
+      final response =
+          await FirebaseFirestore.instance.collection('chat_room').add(
+                ChatRoomModel(
+                  chatRoomId: '',
+                  accepted: false,
+                  gender: '${UserSession.instance.gender}',
+                  summary: '',
+                  lastMessage: '',
+                  roomName: 'Student-Teacher Chat ${UserSession.instance.uid}',
+                  studentId: '${UserSession.instance.uid}',
+                  teacherId: '',
+                  studentToken: '$studentToken',
+                  teacherToken: '',
+                  unreadMsgCount: 0,
+                  updatedAt: Timestamp.fromDate(DateTime.now().toLocal()),
+                  createdAt: Timestamp.fromDate(DateTime.now().toLocal()),
+                ).toMap(),
+              );
+      await FirebaseFirestore.instance
+          .collection('chat_room')
+          .doc(response.id)
+          .update({
+        'chat_room_id': response.id,
+      });
+      emit(RequestAnonymousChatSuccess());
+    } catch (error) {
+      log('freefire khelega');
+      emit(RequestAnonymousChatError());
+    }
   }
 }
