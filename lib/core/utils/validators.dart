@@ -1,6 +1,3 @@
-
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:sage_app/core/extensions/string.dart';
 
@@ -29,7 +26,6 @@ abstract class Validators {
   }
 
   static String? email(String? email) {
-    log('Email: $email');
     if (email == null || email.isEmpty) {
       return "Enter email address";
     }

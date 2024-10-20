@@ -14,7 +14,7 @@ class InviteCodeScreen extends StatelessWidget {
       create: (context) => AuthRepository(),
       child: BlocProvider(
         create: (context) => InviteCodeBloc(),
-        child: InviteCodeView(),
+        child: const InviteCodeView(),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,14 +33,38 @@ class ChatBotView extends StatelessWidget {
                   );
                 }
                 if (state is ChatLoadedState && state.showWarning) {
+                  final chatBotBloc = context.read<ChatBotBloc>();
+                  showCupertinoDialog<void>(
+                    context: context,
+                    builder: (BuildContext context) => BlocProvider.value(
+                      value: chatBotBloc,
+                      child: CupertinoAlertDialog(
+                        title: const Text('Alert'),
+                        content: const Text(
+                            'Consider seeking professional counseling or request a one-on-one chat with an anonymous teacher.'),
+                        actions: <CupertinoDialogAction>[
+                          CupertinoDialogAction(
+                            isDestructiveAction: true,
+                            onPressed: () {
+                              chatBotBloc.add(RequestAnonymousChat());
+                            },
+                            child: const Text('Yes'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+                if (state is RequestAnonymousChatSuccess) {
+                  Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      backgroundColor: Colors.red,
+                      backgroundColor: Colors.teal,
                       behavior: SnackBarBehavior.floating,
                       margin: const EdgeInsets.only(top: 20.0),
                       content: FloatingSnackBar(
-                        message: "I'm sorry to hear that."
-                            " You should speak to someone about yourself.",
+                        message:
+                            "You will be notified when someone accepts your request.",
                         onDismissed: () =>
                             ScaffoldMessenger.of(context).hideCurrentSnackBar(),
                       ),
@@ -73,3 +98,17 @@ class ChatBotView extends StatelessWidget {
     );
   }
 }
+/*
+                  ScaffoldMessenger.of(context).showSnackBar(
+SnackBar(
+                      backgroundColor: Colors.red,
+                      behavior: SnackBarBehavior.floating,
+                      margin: const EdgeInsets.only(top: 20.0),
+                      content: FloatingSnackBar(
+                        message: "I'm sorry to hear that."
+                            " You should speak to someone about yourself.",
+                        onDismissed: () =>
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+                      ),
+                    ),);
+* */

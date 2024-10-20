@@ -16,7 +16,6 @@ class Config {
   static Future<void> fetchAndStoreUserData(String uid) async {
     try {
       // Fetch the user document from Firestore
-
       if (uid.isNotEmpty) {
         DocumentSnapshot documentSnapshot =
             await FirebaseFirestore.instance.collection('users').doc(uid).get();
@@ -37,8 +36,6 @@ class Config {
               uid: data['uid'],
               username: data['username'],
             );
-
-            log('User session initialized with username: ${UserSession.instance.username}');
           }
         }else{
           log('No User Document found');

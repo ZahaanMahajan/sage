@@ -10,3 +10,4 @@ class SendMessageEvent extends ChatBotEvent {
   SendMessageEvent(this.message);
 }
 
+class RequestAnonymousChat extends ChatBotEvent {}

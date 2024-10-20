@@ -58,8 +58,6 @@ class _AnonymousRequestsViewState extends State<AnonymousRequestsView> {
                     .where('accepted', isEqualTo: false)
                     .where('gender',
                         isEqualTo: UserSession.instance.gender ?? 'male')
-                    .where('teacher_id',
-                        isEqualTo: UserSession.instance.uid.toString())
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {

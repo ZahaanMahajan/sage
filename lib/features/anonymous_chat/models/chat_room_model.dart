@@ -4,6 +4,7 @@ class ChatRoomModel {
   final String chatRoomId;
   final bool accepted;
   final String gender;
+  final String summary;
   final String lastMessage;
   final String roomName;
   final String studentId;
@@ -18,6 +19,7 @@ class ChatRoomModel {
     required this.chatRoomId,
     required this.accepted,
     required this.gender,
+    required this.summary,
     required this.lastMessage,
     required this.roomName,
     required this.studentId,
@@ -34,6 +36,7 @@ class ChatRoomModel {
       chatRoomId: map['chat_room_id'],
       accepted: map['accepted'] ?? false,
       gender: map['gender'] ?? '',
+      summary: map['summary'] ?? '',
       lastMessage: map['last_message'] ?? '',
       roomName: map['room_name'] ?? '',
       studentId: map['student_id'] ?? '',
@@ -51,6 +54,7 @@ class ChatRoomModel {
       'chat_room_id': chatRoomId,
       'accepted': accepted,
       'gender': gender,
+      'summary': summary,
       'last_message': lastMessage,
       'room_name': roomName,
       'student_id': studentId,

@@ -4,7 +4,6 @@ import 'package:sage_app/features/auth/signup/view/signup_screen.dart';
 import 'package:sage_app/features/auth/login/view/login_screen.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:sage_app/core/constants/string_manager.dart';
-import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:sage_app/core/widgets/custom_button.dart';
 import 'package:sage_app/core/widgets/input_field.dart';
 import 'package:sage_app/core/utils/validators.dart';
@@ -29,10 +28,10 @@ class _InviteCodeViewState extends State<InviteCodeView> {
       child: Scaffold(
         body: Container(
           height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Colors.teal,
+                Colors.teal.shade200,
                 Colors.white,
               ],
               begin: Alignment.topLeft,
@@ -62,9 +61,7 @@ class _InviteCodeViewState extends State<InviteCodeView> {
                 );
               } else if (state is InviteCodeLoading) {
                 progress?.show();
-
-              }
-              else if (state is InviteCodeUsed) {
+              } else if (state is InviteCodeUsed) {
                 progress?.dismiss();
                 const snackBar = SnackBar(
                   elevation: 0,
@@ -77,7 +74,7 @@ class _InviteCodeViewState extends State<InviteCodeView> {
                       fontSize: 18,
                     ),
                     message:
-                    'The Invitation code you\'ve entered has already been used.',
+                        'The Invitation code you\'ve entered has already been used.',
                     messageTextStyle: TextStyle(fontWeight: FontWeight.bold),
                     contentType: ContentType.help,
                     color: Colors.blueGrey,
@@ -87,8 +84,7 @@ class _InviteCodeViewState extends State<InviteCodeView> {
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(snackBar);
-              }
-              else if (state is InviteCodeError) {
+              } else if (state is InviteCodeError) {
                 progress?.dismiss();
                 const snackBar = SnackBar(
                   elevation: 0,
@@ -100,8 +96,7 @@ class _InviteCodeViewState extends State<InviteCodeView> {
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
-                    message:
-                    'Something went wrong. Please try again later.',
+                    message: 'Something went wrong. Please try again later.',
                     messageTextStyle: TextStyle(fontWeight: FontWeight.bold),
                     contentType: ContentType.failure,
                   ),
@@ -140,16 +135,13 @@ class _InviteCodeViewState extends State<InviteCodeView> {
                 child: Column(
                   children: [
                     const SizedBox(height: 100),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 48,
-                      ),
+                    SizedBox(
                       height: size.height * 0.36,
-                      child: const ModelViewer(
+                      child: Image.asset(StringManager.sageLogo),
+                      /*ModelViewer(
                         src: StringManager.loco3dModel,
                         disablePan: true,
-                      ),
+                      ),*/
                     ),
                     const Text(
                       'Enter the invitation code to create an account.',
