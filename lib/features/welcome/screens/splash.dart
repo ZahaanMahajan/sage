@@ -1,9 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:sage_app/core/app/landing.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sage_app/features/auth/invite/view/invite_code_screen.dart';
-import 'package:sage_app/features/home/screens/home_screen.dart';
-//import 'package:sage_app/features/home/home.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -36,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
+            builder: (context) => const Landing(),
           ),
         );
       }
