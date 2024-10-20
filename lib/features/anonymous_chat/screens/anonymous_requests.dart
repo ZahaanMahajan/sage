@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:sage_app/core/models/user.dart';

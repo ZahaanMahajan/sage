@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sage_app/core/models/user.dart';
 import 'package:sage_app/features/anonymous_chat/screens/anonymous_chat.dart';
 import 'package:sage_app/features/auth/invite/view/invite_code_screen.dart';
 import 'package:sage_app/features/chatbot/screen/chatbot_screen.dart';
@@ -55,7 +56,9 @@ class HomeView extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) =>
                       // const ChatScreen(chatRoomId: 'VOnbWL7Ql6yVbFFJKezt'),
-                      const AnonymousChat(isStudent: false),
+                      AnonymousChat(
+                    isStudent: UserSession.instance.profession == 'student',
+                  ),
                 ),
               );
             },
