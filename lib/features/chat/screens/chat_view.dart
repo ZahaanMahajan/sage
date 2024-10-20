@@ -2,8 +2,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:sage_app/features/chat/bloc/conversation_bloc.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:sage_app/features/chat/widgets/custom_chat_input.dart';
 
 class ChatView extends StatefulWidget {
@@ -62,7 +62,7 @@ class _ChatViewState extends State<ChatView> {
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
-                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                if (!snapshot.hasData) {
                   return const Center(child: Text('No messages yet'));
                 }
                 final messages = snapshot.data!;

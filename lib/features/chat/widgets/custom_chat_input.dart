@@ -34,6 +34,7 @@ class CustomChatInputState extends State<CustomChatInput> {
           Expanded(
             child: TextField(
               controller: _controller,
+              textInputAction: TextInputAction.newline,
               decoration: InputDecoration(
                 hintText: 'Type something',
                 filled: true,
@@ -42,7 +43,6 @@ class CustomChatInputState extends State<CustomChatInput> {
                   borderRadius: BorderRadius.circular(30),
                   borderSide: BorderSide.none,
                 ),
-                // prefixIcon: const Icon(Icons.message, color: Colors.grey),
               ),
             ),
           ),
