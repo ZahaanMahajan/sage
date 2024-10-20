@@ -55,7 +55,7 @@ class HomeView extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) =>
                       // const ChatScreen(chatRoomId: 'VOnbWL7Ql6yVbFFJKezt'),
-                      const AnonymousChat(isStudent: true),
+                      const AnonymousChat(isStudent: false),
                 ),
               );
             },
