@@ -32,7 +32,7 @@ class HomeView extends StatelessWidget {
           ),
           body: Container(
             padding: const EdgeInsets.only(top: 100, left: 24),
-            decoration: BoxDecoration(
+            /*decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
                   Colors.white,
@@ -41,7 +41,7 @@ class HomeView extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-            ),
+            ),*/
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

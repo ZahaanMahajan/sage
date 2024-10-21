@@ -4,8 +4,6 @@ abstract class ChatBotState {}
 
 class ChatInitialState extends ChatBotState {}
 
-class ChatLoadingState extends ChatBotState {}
-
 class ChatLoadedState extends ChatBotState {
   final List<ChatMessage> messages;
   final List<ChatUser> typingUsers;
@@ -40,6 +38,11 @@ class ChatErrorState extends ChatBotState {
 
 class RequestAnonymousChatState extends ChatBotState {}
 
+class RequestAnonymousChatLoading extends ChatBotState {}
+
 class RequestAnonymousChatError extends ChatBotState {}
 
-class RequestAnonymousChatSuccess extends ChatBotState {}
+class RequestAnonymousChatSuccess extends ChatLoadedState {
+  RequestAnonymousChatSuccess(super.messages);
+}
+

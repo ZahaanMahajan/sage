@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:sage_app/core/models/user.dart';
-import 'package:sage_app/features/anonymous_chat/models/chat_room_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:sage_app/repository/chatbot_repository.dart';
+import 'package:sage_app/features/anonymous_chat/models/chat_room_model.dart';
 
 part 'chatbot_event.dart';
 
@@ -91,9 +91,10 @@ class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
 
   FutureOr<void> _requestAnonymousChat(
       RequestAnonymousChat event, Emitter<ChatBotState> emit) async {
-    emit(ChatLoadingState());
+    emit(RequestAnonymousChatLoading());
     try {
       final studentToken = await FirebaseMessaging.instance.getToken();
+      final summary = chatRepository.getSummary(messages);
       final response =
           await FirebaseFirestore.instance.collection('chat_room').add(
                 ChatRoomModel(
@@ -118,7 +119,7 @@ class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
           .update({
         'chat_room_id': response.id,
       });
-      emit(RequestAnonymousChatSuccess());
+      emit(RequestAnonymousChatSuccess(List.from(messages)));
     } catch (error) {
       log('freefire khelega');
       emit(RequestAnonymousChatError());
