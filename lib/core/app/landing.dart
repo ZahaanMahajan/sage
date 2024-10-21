@@ -16,16 +16,22 @@ class Landing extends StatefulWidget {
 class _LandingState extends State<Landing> {
   int currentIndex = 0;
   final PageController pageController = PageController();
+  bool isLoading = true;
 
   @override
   void initState() {
-    fetchUserInformation();
     super.initState();
+    fetchUserInformation();
   }
 
   void fetchUserInformation() async {
     final uid = FirebaseAuth.instance.currentUser?.uid ?? '';
     await Config.fetchAndStoreUserData(uid);
+
+    // After fetching user data, update the state to stop loading
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void onTap(int index) {
@@ -38,14 +44,56 @@ class _LandingState extends State<Landing> {
 
   @override
   Widget build(BuildContext context) {
-    var bottomNavScreens = <Widget>[
-      const HomeScreen(),
-      AnonymousChat(isStudent: UserSession.instance.profession == 'student'),
-    ];
+    if (isLoading) {
+      // Show loading spinner while fetching user data
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
 
-    var destinationItems = List.generate(
+    // Once data is loaded, check the user's profession and display the correct screen
+    return UserSession.instance.profession == 'teacher'
+        ? const AnonymousChat(isStudent: false)
+        : Scaffold(
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      body: PageView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: pageController,
+        onPageChanged: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+        itemCount: 2,
+        itemBuilder: (context, index) {
+          var bottomNavScreens = [
+            const HomeScreen(),
+            const AnonymousChat(isStudent: true),
+          ];
+          return bottomNavScreens[index];
+        },
+      ),
+      bottomNavigationBar: NavigationBar(
+        height: 50,
+        elevation: 0,
+        selectedIndex: currentIndex,
+        onDestinationSelected: onTap,
+        destinations: _buildDestinationItems(),
+        indicatorColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+      ),
+    );
+  }
+
+  List<NavigationDestination> _buildDestinationItems() {
+    return List.generate(
       2,
-      (index) {
+          (index) {
         String outlineIcon;
         String filledIcon;
         String label;
@@ -79,35 +127,6 @@ class _LandingState extends State<Landing> {
           label: label,
         );
       },
-    );
-
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      extendBodyBehindAppBar: true,
-      extendBody: true,
-      body: PageView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: pageController,
-        onPageChanged: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
-        itemCount: bottomNavScreens.length,
-        itemBuilder: (context, index) {
-          return bottomNavScreens[index];
-        },
-      ),
-      bottomNavigationBar: NavigationBar(
-        height: 50,
-        elevation: 0,
-        selectedIndex: currentIndex,
-        onDestinationSelected: onTap,
-        destinations: destinationItems,
-        indicatorColor: Colors.transparent,
-        backgroundColor: Colors.transparent,
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-      ),
     );
   }
 

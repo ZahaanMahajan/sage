@@ -1,9 +1,11 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:sage_app/core/models/user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sage_app/core/constants/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sage_app/features/chat/screens/chat.dart';
+import 'package:sage_app/features/auth/invite/view/invite_code_screen.dart';
 import 'package:sage_app/features/anonymous_chat/models/chat_room_model.dart';
 import 'package:sage_app/features/anonymous_chat/screens/anonymous_requests.dart';
 
@@ -160,6 +162,20 @@ class _TeacherViewState extends State<TeacherView> {
             },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          FirebaseAuth.instance.signOut();
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const InviteCodeScreen(),
+              ),
+              (Route<dynamic> route) => false);
+        },
+        child: const Icon(
+          Icons.logout,
+        ),
       ),
     );
   }

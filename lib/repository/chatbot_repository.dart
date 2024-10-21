@@ -76,4 +76,10 @@ class ChatBotRepository {
       );
     }).toList();
   }
+
+  Future<String> getSummary(List messages) async {
+    // Load chat history from Firestore
+
+    return '';
+  }
 }
