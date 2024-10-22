@@ -46,3 +46,7 @@ class RequestAnonymousChatSuccess extends ChatLoadedState {
   RequestAnonymousChatSuccess(super.messages);
 }
 
+class RequestAnonymousChatExists extends ChatLoadedState {
+  RequestAnonymousChatExists(super.messages);
+}
+

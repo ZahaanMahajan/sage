@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sage_app/core/models/user.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sage_app/core/widgets/custom_appbar.dart';
-import 'package:sage_app/features/auth/invite/view/invite_code_screen.dart';
-import 'package:sage_app/features/chatbot/screen/chatbot_screen.dart';
 import 'package:sage_app/features/home/bloc/home_bloc.dart';
+import 'package:sage_app/features/home/widgets/custom_drawer.dart';
+import 'package:sage_app/features/home/widgets/mood_tracker.dart';
+import 'package:sage_app/features/chatbot/screen/chatbot_screen.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -30,8 +30,13 @@ class HomeView extends StatelessWidget {
               ),
             ),
           ),
+          drawer: const HomeDrawer(),
           body: Container(
-            padding: const EdgeInsets.only(top: 100, left: 24),
+            padding: const EdgeInsets.only(
+              top: 100,
+              left: 24,
+              right: 24,
+            ),
             /*decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -45,7 +50,10 @@ class HomeView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(width: double.infinity),
+                const SizedBox(
+                  width: double.infinity,
+                  height: 40,
+                ),
                 Text(
                   'Hey ${UserSession.instance.username}!',
                   style: TextStyle(
@@ -54,37 +62,38 @@ class HomeView extends StatelessWidget {
                     fontSize: 28,
                   ),
                 ),
-                Row(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const ChatBotScreen()),
-                        );
-                      },
-                      child: const Text("Chatbot"),
+                const SizedBox(height: 40),
+                const MoodTracker(),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.teal,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => const InviteCodeScreen(),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                const ChatBotScreen()),
+                      );
+                    },
+                    child: const Text(
+                      "Sage",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
                   ),
-                  (Route<dynamic> route) => false);
-            },
-            child: const Icon(
-              Icons.logout,
+                ),
+                const SizedBox(height: 100),
+              ],
             ),
           ),
         );

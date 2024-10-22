@@ -123,6 +123,16 @@ class _AnonymousRequestsViewState extends State<AnonymousRequestsView> {
                               ),
                               onTap: () {
                                 // Handle the details of the Query
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      content: displayFormattedSummary(
+                                        chatRoom.summary,
+                                      ),
+                                    );
+                                  },
+                                );
                               },
                             ),
                           ),
@@ -135,6 +145,35 @@ class _AnonymousRequestsViewState extends State<AnonymousRequestsView> {
             );
           },
         ),
+      ),
+    );
+  }
+
+  Widget displayFormattedSummary(String summary) {
+    // Split the summary by newlines to make it more readable
+    List<String> summaryLines = summary.split('\n');
+
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: summaryLines.map((line) {
+          if (line.trim().isEmpty) {
+            return const SizedBox(height: 10.0);
+          }
+          return Text(
+            line,
+            style: TextStyle(
+              fontSize: 16.0,
+              color: Colors.black87,
+              fontWeight: line.startsWith('Conversation Summary') ||
+                      line.startsWith('Student Description')
+                  ? FontWeight.bold
+                  : FontWeight.normal,
+            ),
+          );
+        }).toList(),
       ),
     );
   }
