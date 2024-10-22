@@ -61,29 +61,61 @@ class MoodTracker extends StatelessWidget {
 
         if (state is MoodLoaded) {
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AspectRatio(
-                aspectRatio: 1.5,
+              Text(
+                'Mood Trends',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.teal.shade800,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.only(top: 24, left: 12, right: 36,bottom: 12,),
+                height: 260,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        offset: const Offset(5, 5),
+                        blurRadius: 5,
+                        spreadRadius: 1,
+                      ),
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        offset: const Offset(-5, -5),
+                        blurRadius: 5,
+                        spreadRadius: 1,
+                      ),
+                    ]),
                 child: MoodChart(moodData: state.moodData),
               ),
-              const SizedBox(height: 30),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      'Select Mood: ${state.selectedMood}',
+                      style: const TextStyle(color: Colors.teal),
+                    ),
+                    onPressed: () => _showCupertinoMoodPicker(context),
                   ),
                 ),
-                child: Text(
-                  'Select Mood: ${state.selectedMood}',
-                  style: const TextStyle(color: Colors.teal),
-                ),
-                onPressed: () => _showCupertinoMoodPicker(context),
               ),
             ],
           );
         }
-
         return const SizedBox.shrink();
       },
     );
@@ -124,7 +156,7 @@ class MoodChart extends StatelessWidget {
         lineBarsData: [
           LineChartBarData(
             spots: _generateMoodSpots(),
-            isCurved: true,
+            // isCurved: true,
             color: Colors.teal,
           ),
         ],
@@ -132,10 +164,17 @@ class MoodChart extends StatelessWidget {
           show: true,
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
+              reservedSize: 30,
               showTitles: true,
               getTitlesWidget: (value, meta) {
                 int index = value.toInt();
-                return Text(MoodTracker.weekDays[index]);
+                return Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    MoodTracker.weekDays[index],
+                    style: TextStyle(color: Colors.grey.shade700),
+                  ),
+                );
               },
             ),
           ),
@@ -146,7 +185,10 @@ class MoodChart extends StatelessWidget {
               getTitlesWidget: (value, meta) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: Text(_getMoodLabel(value)),
+                  child: Text(
+                    _getMoodLabel(value),
+                    style: TextStyle(color: Colors.grey.shade700),
+                  ),
                 );
               },
             ),
