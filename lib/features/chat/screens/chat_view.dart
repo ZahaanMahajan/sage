@@ -44,54 +44,80 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
         if (state is ConversationLoaded) {
           return Scaffold(
             backgroundColor: Colors.white,
-            appBar: AppBar(
-              title: const Text(
-                'Sage - Anonymous Chat',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20,
+            body: Stack(
+              children: [
+                StreamBuilder<List<types.Message>>(
+                  stream: context.read<ConversationBloc>().messageStream,
+                  builder: (context, snapshot) {
+                    //* ======= Connection Error ======= *//
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    //* ======= Connection Error ======= *//
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    }
+
+                    //* ======= No Data Found ======= *//
+                    if (!snapshot.hasData) {
+                      return const Center(child: Text('No messages yet'));
+                    }
+
+                    //* ======= Chat UI ======= *//
+                    final messages = snapshot.data!;
+                    return Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.grey[900]!,
+                            Colors.black,
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ),
+                      ),
+                      child: Chat(
+                        user: cubit.user,
+                        messages: messages,
+                        showUserAvatars: false,
+                        onEndReached: _loadMoreMessages,
+                        customBottomWidget: CustomChatInput(
+                          onSend: (types.PartialText message) =>
+                              cubit.add(SendMessage(message.text)),
+                        ),
+                        onSendPressed: (types.PartialText message) =>
+                            cubit.add(SendMessage(message.text)),
+                        bubbleBuilder: _bubbleBuilder,
+                        theme: const DefaultChatTheme(
+                          backgroundColor: Colors.transparent,
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              ),
-              backgroundColor: Colors.teal.shade300,
-            ),
-            body: StreamBuilder<List<types.Message>>(
-              stream: context.read<ConversationBloc>().messageStream,
-              builder: (context, snapshot) {
-                //* ======= Connection Error ======= *//
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                //* ======= Connection Error ======= *//
-                if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
-
-                //* ======= No Data Found ======= *//
-                if (!snapshot.hasData) {
-                  return const Center(child: Text('No messages yet'));
-                }
-
-                //* ======= Chat UI ======= *//
-                final messages = snapshot.data!;
-                return Chat(
-                  user: cubit.user,
-                  messages: messages,
-                  showUserAvatars: false,
-                  onEndReached: _loadMoreMessages,
-                  customBottomWidget: CustomChatInput(
-                    onSend: (types.PartialText message) =>
-                        cubit.add(SendMessage(message.text)),
+                Positioned(
+                  left: 10,
+                  top: 50,
+                  child: Row(
+                    children: [
+                      IconButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          icon: const Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.white,
+                          )),
+                      const Text(
+                        'Chat Room',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24),
+                      ),
+                    ],
                   ),
-                  onSendPressed: (types.PartialText message) =>
-                      cubit.add(SendMessage(message.text)),
-                  bubbleBuilder: _bubbleBuilder,
-                  theme: const DefaultChatTheme(
-                    backgroundColor: Colors.white,
-                  ),
-                );
-              },
+                ),
+              ],
             ),
           );
         }
@@ -148,8 +174,8 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
       Bubble(
         color: context.read<ConversationBloc>().user.id != message.author.id ||
                 message.type == types.MessageType.image
-            ? Colors.teal.shade300
-            : Colors.black,
+            ? Colors.white
+            : Colors.grey.shade700,
         padding: const BubbleEdges.all(0),
         margin: nextMessageInGroup
             ? const BubbleEdges.symmetric(horizontal: 12)

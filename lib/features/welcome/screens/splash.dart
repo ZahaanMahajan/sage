@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:sage_app/core/app/landing.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sage_app/core/constants/string_manager.dart';
@@ -60,10 +59,9 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         ),
         child: SizedBox(
-        height: 300,
-        child: Image.asset(StringManager.sageLogo),
-
-      ),
+          height: 300,
+          child: Image.asset(StringManager.sageLogo),
+        ),
       ),
     );
   }

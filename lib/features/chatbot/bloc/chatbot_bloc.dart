@@ -105,7 +105,8 @@ class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
                     gender: '${UserSession.instance.gender}',
                     summary: summary,
                     lastMessage: '',
-                    roomName: '${UserSession.instance.uid}',
+                    roomName:
+                        'Student ${UserSession.instance.uid!.substring(1, 4)}',
                     studentId: '${UserSession.instance.uid}',
                     teacherId: '',
                     studentToken: '$studentToken',
