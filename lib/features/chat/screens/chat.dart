@@ -7,9 +7,10 @@ import 'package:sage_app/features/chat/screens/chat_view.dart';
 import 'package:sage_app/features/chat/bloc/conversation_bloc.dart';
 
 class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key, required this.chatRoomId});
+  const ChatScreen({super.key, required this.chatRoomId, required this.token});
 
   final String chatRoomId;
+  final String token;
   @override
   Widget build(BuildContext context) {
     log('Chat Room id: $chatRoomId');
@@ -17,7 +18,7 @@ class ChatScreen extends StatelessWidget {
       create: (context) => ChatRepository(),
       child: BlocProvider(
         create: (context) => ConversationBloc(),
-        child: ChatView(chatRoomId: chatRoomId),
+        child: ChatView(chatRoomId: chatRoomId, token: token),
       ),
     );
   }

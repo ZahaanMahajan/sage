@@ -82,9 +82,10 @@ class _StudentViewState extends State<StudentView> {
                       ),
                       title: Text(
                         chatRoom.roomName,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       subtitle: Text(
@@ -109,6 +110,7 @@ class _StudentViewState extends State<StudentView> {
                           MaterialPageRoute(
                             builder: (context) => ChatScreen(
                               chatRoomId: chatRoom.chatRoomId,
+                              token: chatRoom.teacherToken,
                             ),
                           ),
                         );

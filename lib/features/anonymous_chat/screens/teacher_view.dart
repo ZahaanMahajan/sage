@@ -36,7 +36,7 @@ class _TeacherViewState extends State<TeacherView> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const AnonymousRequestsView(),
@@ -88,9 +88,9 @@ class _TeacherViewState extends State<TeacherView> {
                   Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                    margin: const EdgeInsets.symmetric(horizontal: 6),
+                    margin: const EdgeInsets.only(top: 8, left: 8, right: 8),
                     decoration: BoxDecoration(
-                      color: btnBg.withOpacity(0.3),
+                      color: Colors.teal.withOpacity(0.25),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: ListTile(
@@ -102,8 +102,10 @@ class _TeacherViewState extends State<TeacherView> {
                       ),
                       title: Text(
                         chatRoom.roomName,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.ellipsis,
                           fontSize: 16,
                         ),
                       ),
@@ -129,6 +131,7 @@ class _TeacherViewState extends State<TeacherView> {
                           MaterialPageRoute(
                             builder: (context) => ChatScreen(
                               chatRoomId: chatRoom.chatRoomId,
+                              token: chatRoom.studentToken,
                             ),
                           ),
                         );

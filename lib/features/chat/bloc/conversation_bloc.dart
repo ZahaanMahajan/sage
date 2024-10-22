@@ -18,12 +18,14 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   final user = types.User(id: FirebaseAuth.instance.currentUser!.uid);
   DocumentSnapshot? lastDocument;
   StreamSubscription? _messageSubscription;
+  String messageingToken = '';
 
   ConversationBloc() : super(ConversationInitial()) {
     on<ConversationEvent>((event, emit) {});
     on<SendMessage>(_onSendMessage);
     on<GetInitialMessages>(_getInitialMessages);
     on<LoadMoreChats>(_loadMoreChats);
+    on<UpdateRoomContents>(_updateRoomContents);
   }
 
   Stream<List<types.Message>> get messageStream =>
@@ -111,5 +113,31 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
         }
       }
     }
+  }
+
+  FutureOr<void> _updateRoomContents(
+      UpdateRoomContents event, Emitter<ConversationState> emit) async {
+    // try {
+    //   // Create the FCM payload
+    //   final body = {
+    //     "registration_ids": [messageingToken],
+    //     "notification": {
+    //       "title": "New Message",
+    //       "body": 'This is FCM',
+    //       "sound": "default"
+    //     },
+    //     "data": {
+    //       "click_action": "FLUTTER_NOTIFICATION_CLICK",
+    //       "message": 'This is FCM',
+    //     }
+    //   };
+
+    //   // Send the FCM message using Firebase's FCM REST API
+    //   await FirebaseMessaging.instance.;
+
+    //   log("FCM message sent successfully");
+    // } catch (e) {
+    //   log("Error sending FCM message: $e");
+    // }
   }
 }

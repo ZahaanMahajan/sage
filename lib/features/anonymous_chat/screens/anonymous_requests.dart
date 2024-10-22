@@ -34,9 +34,8 @@ class _AnonymousRequestsViewState extends State<AnonymousRequestsView> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ChatScreen(
-                    chatRoomId: state.chatRoomID,
-                  ),
+                  builder: (context) =>
+                      ChatScreen(chatRoomId: state.chatRoomID, token: ''),
                 ),
               );
             }
