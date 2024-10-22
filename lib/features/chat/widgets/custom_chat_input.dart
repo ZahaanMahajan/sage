@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class CustomChatInput extends StatefulWidget {
-  final Function(types.PartialText) onSendPressed;
+  final Function(types.PartialText) onSend;
 
-  const CustomChatInput({super.key, required this.onSendPressed});
+  const CustomChatInput({super.key, required this.onSend});
 
   @override
   CustomChatInputState createState() => CustomChatInputState();
@@ -15,7 +15,7 @@ class CustomChatInputState extends State<CustomChatInput> {
 
   void _handleSendPressed() {
     if (_controller.text.trim().isNotEmpty) {
-      widget.onSendPressed(types.PartialText(text: _controller.text.trim()));
+      widget.onSend(types.PartialText(text: _controller.text.trim()));
       _controller.clear();
     }
   }

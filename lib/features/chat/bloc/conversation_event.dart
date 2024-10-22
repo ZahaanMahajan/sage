@@ -20,3 +20,9 @@ class LoadMoreChats extends ConversationEvent {
 
   LoadMoreChats({required this.chatRoomid});
 }
+
+class UpdateRoomContents extends ConversationEvent {
+  final String msg;
+
+  UpdateRoomContents({required this.msg});
+}
