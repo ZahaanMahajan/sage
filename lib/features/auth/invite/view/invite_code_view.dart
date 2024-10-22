@@ -31,8 +31,8 @@ class _InviteCodeViewState extends State<InviteCodeView> {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Colors.teal.shade200,
                 Colors.white,
+                Colors.teal.shade200,
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,

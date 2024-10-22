@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:sage_app/core/models/user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sage_app/core/widgets/custom_appbar.dart';
 import 'package:sage_app/features/home/bloc/home_bloc.dart';
-import 'package:sage_app/features/home/widgets/custom_drawer.dart';
 import 'package:sage_app/features/home/widgets/mood_tracker.dart';
 import 'package:sage_app/features/chatbot/screen/chatbot_screen.dart';
+import 'package:sage_app/features/auth/invite/view/invite_code_screen.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -19,25 +21,57 @@ class HomeView extends StatelessWidget {
           extendBodyBehindAppBar: true,
           extendBody: true,
           appBar: CustomAppBar(
-            trailing: Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: CircleAvatar(
-                radius: 32,
-                child: Text(
-                  UserSession.instance.username?[0] ?? '',
-                  style: const TextStyle(fontSize: 24),
-                ),
-              ),
+            trailing: IconButton(
+              onPressed: () {
+                showCupertinoDialog<void>(
+                  context: context,
+                  builder: (BuildContext context) => CupertinoAlertDialog(
+                    title: const Text('Logout'),
+                    content: const Text(
+                      "Are you sure, you want to logout?",
+                    ),
+                    actions: <CupertinoDialogAction>[
+                      CupertinoDialogAction(
+                        isDestructiveAction: true,
+                        onPressed: () {
+                          Navigator.pop(context);
+                          FirebaseAuth.instance.signOut();
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    const InviteCodeScreen(),
+                              ),
+                              (Route<dynamic> route) => false);
+                        },
+                        child: const Text(
+                          'Logout',
+                          style: TextStyle(color: Colors.teal),
+                        ),
+                      ),
+                      CupertinoDialogAction(
+                        isDestructiveAction: true,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              icon: const Icon(Icons.logout_rounded),
             ),
           ),
-          drawer: const HomeDrawer(),
+          /*drawer: const HomeDrawer(),*/
           body: Container(
+            height: MediaQuery.of(context).size.height,
             padding: const EdgeInsets.only(
-              top: 100,
-              left: 24,
-              right: 24,
+              top: 70,
+              left: 18,
+              right: 18,
             ),
-            /*decoration: BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
                   Colors.white,
@@ -46,53 +80,86 @@ class HomeView extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-            ),*/
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+            child: Stack(
               children: [
-                const SizedBox(
-                  width: double.infinity,
-                  height: 40,
-                ),
-                Text(
-                  'Hey ${UserSession.instance.username}!',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.teal.shade800,
-                    fontSize: 28,
-                  ),
-                ),
-                const SizedBox(height: 40),
-                const MoodTracker(),
-
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.teal,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Hey ${UserSession.instance.username}!',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.teal.shade800,
+                                fontSize: 28,
+                              ),
+                            ),
+                            const SizedBox(height: 30),
+                            const MoodTracker(),
+                            const SizedBox(height: 100),
+                          ],
+                        ),
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
+                  ],
+                ),
+                Positioned(
+                  bottom: 100,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    height: 54,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.teal,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                const ChatBotScreen()),
-                      );
-                    },
-                    child: const Text(
-                      "Sage",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 18,
+                                const ChatBotScreen(),
+                          ),
+                        );
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Spacer(),
+                          Text(
+                            'Start a session with',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                          Text(
+                            " Sage",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
+                          SizedBox(width: 12),
+                          Icon(
+                            Icons.arrow_forward,
+                            color: Colors.white,
+                          ),
+                          Spacer(),
+                        ],
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 100),
               ],
             ),
           ),
@@ -101,3 +168,4 @@ class HomeView extends StatelessWidget {
     );
   }
 }
+

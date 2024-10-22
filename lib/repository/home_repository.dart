@@ -24,16 +24,14 @@ class HomeRepository {
     final user = _auth.currentUser;
     if (user == null) throw Exception('User not authenticated');
 
-    final now = DateTime.now();
-    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-    final endOfWeek = startOfWeek.add(const Duration(days: 6));
+    // final now = DateTime.now();
+    //final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+    //final endOfWeek = startOfWeek.add(const Duration(days: 6));
 
     final querySnapshot = await _firestore
         .collection('users')
         .doc(user.uid)
         .collection('moods')
-        .where('date', isGreaterThanOrEqualTo: startOfWeek)
-        .where('date', isLessThanOrEqualTo: endOfWeek)
         .get();
 
     final Map<int, double> moodData = {};

@@ -149,7 +149,7 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
         color: context.read<ConversationBloc>().user.id != message.author.id ||
                 message.type == types.MessageType.image
             ? Colors.teal.shade300
-            : const Color(0xff6f61e8),
+            : Colors.black,
         padding: const BubbleEdges.all(0),
         margin: nextMessageInGroup
             ? const BubbleEdges.symmetric(horizontal: 12)
