@@ -94,35 +94,49 @@ class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
     emit(RequestAnonymousChatLoading());
     try {
       final studentToken = await FirebaseMessaging.instance.getToken();
-      final summary = chatRepository.getSummary(messages);
-      final response =
-          await FirebaseFirestore.instance.collection('chat_room').add(
-                ChatRoomModel(
-                  chatRoomId: '',
-                  accepted: false,
-                  gender: '${UserSession.instance.gender}',
-                  summary: '',
-                  lastMessage: '',
-                  roomName: 'Student-Teacher Chat ${UserSession.instance.uid}',
-                  studentId: '${UserSession.instance.uid}',
-                  teacherId: '',
-                  studentToken: '$studentToken',
-                  teacherToken: '',
-                  unreadMsgCount: 0,
-                  updatedAt: Timestamp.fromDate(DateTime.now().toLocal()),
-                  createdAt: Timestamp.fromDate(DateTime.now().toLocal()),
-                ).toMap(),
-              );
-      await FirebaseFirestore.instance
-          .collection('chat_room')
-          .doc(response.id)
-          .update({
-        'chat_room_id': response.id,
-      });
-      emit(RequestAnonymousChatSuccess(List.from(messages)));
+      final summary = await chatRepository.getSummary(messages);
+      final checkExistingStudentRequest = await checkExistingRequest();
+      if (checkExistingStudentRequest) {
+        final response =
+            await FirebaseFirestore.instance.collection('chat_room').add(
+                  ChatRoomModel(
+                    chatRoomId: '',
+                    accepted: false,
+                    gender: '${UserSession.instance.gender}',
+                    summary: summary,
+                    lastMessage: '',
+                    roomName: '${UserSession.instance.uid}',
+                    studentId: '${UserSession.instance.uid}',
+                    teacherId: '',
+                    studentToken: '$studentToken',
+                    teacherToken: '',
+                    unreadMsgCount: 0,
+                    updatedAt: Timestamp.fromDate(DateTime.now().toLocal()),
+                    createdAt: Timestamp.fromDate(DateTime.now().toLocal()),
+                  ).toMap(),
+                );
+        await FirebaseFirestore.instance
+            .collection('chat_room')
+            .doc(response.id)
+            .update({
+          'chat_room_id': response.id,
+        });
+        emit(RequestAnonymousChatSuccess(List.from(messages)));
+      } else {
+        emit(RequestAnonymousChatExists(List.from(messages)));
+      }
     } catch (error) {
-      log('freefire khelega');
+      log('Error: $error');
       emit(RequestAnonymousChatError());
     }
+  }
+
+  Future<bool> checkExistingRequest() async {
+    final response = await FirebaseFirestore.instance
+        .collection('chat_room')
+        .where('student_id', isEqualTo: '${UserSession.instance.uid}')
+        .limit(1)
+        .get();
+    return response.docs.isEmpty;
   }
 }

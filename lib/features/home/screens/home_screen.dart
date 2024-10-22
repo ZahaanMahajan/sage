@@ -12,7 +12,9 @@ class HomeScreen extends StatelessWidget {
     return RepositoryProvider(
       create: (context) => HomeRepository(),
       child: BlocProvider(
-        create: (context) => HomeBloc(),
+        create: (context) => HomeBloc(
+          repository: context.read<HomeRepository>(),
+        )..add(LoadMoods()),
         child: const HomeView(),
       ),
     );

@@ -28,9 +28,8 @@ class ChatBotScreen extends StatelessWidget {
         create: (context) => ChatBotBloc(
           context.read<ChatBotRepository>(),
           ChatUser(
-              id: '${UserSession.instance.uid}',
-              firstName: 'Zahaan',
-              lastName: 'Javaid'),
+            id: '${UserSession.instance.uid}',
+          ),
           ChatUser(id: 'sage_id', firstName: 'Sage'),
         )..add(ChatStartedEvent()),
         child: const ChatBotView(),

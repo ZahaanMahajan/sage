@@ -36,7 +36,7 @@ class _TeacherViewState extends State<TeacherView> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const AnonymousRequestsView(),

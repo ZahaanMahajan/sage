@@ -41,8 +41,9 @@ class ChatBotView extends StatelessWidget {
                       child: CupertinoAlertDialog(
                         title: const Text('Alert'),
                         content: const Text(
-                            'Consider seeking professional counseling or request'
-                            ' a one-on-one chat with an anonymous teacher.'),
+                          'Consider seeking professional counseling or request'
+                          ' a one-on-one chat with an anonymous teacher.',
+                        ),
                         actions: <CupertinoDialogAction>[
                           CupertinoDialogAction(
                             isDestructiveAction: true,
@@ -50,6 +51,33 @@ class ChatBotView extends StatelessWidget {
                               chatBotBloc.add(RequestAnonymousChat());
                             },
                             child: const Text('Yes'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+                if (state is RequestAnonymousChatExists) {
+                  final chatBotBloc = context.read<ChatBotBloc>();
+                  Navigator.pop(context);
+                  showCupertinoDialog<void>(
+                    context: context,
+                    builder: (BuildContext context) => BlocProvider.value(
+                      value: chatBotBloc,
+                      child: CupertinoAlertDialog(
+                        title: const Text('Note'),
+                        content: const Text(
+                          "Your session will be saved, and you'll have the opportunity "
+                          "to chat anonymously with a teacher to share any issues you're "
+                          "facing after accepting your request",
+                        ),
+                        actions: <CupertinoDialogAction>[
+                          CupertinoDialogAction(
+                            isDestructiveAction: true,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('OK'),
                           ),
                         ],
                       ),
@@ -64,8 +92,8 @@ class ChatBotView extends StatelessWidget {
                       behavior: SnackBarBehavior.floating,
                       margin: const EdgeInsets.only(top: 20.0),
                       content: FloatingSnackBar(
-                        message:
-                            "You will be notified when someone accepts your request.",
+                        message: "Your request for chat is recorded. "
+                            "The chat will appear once someone accepts.",
                         onDismissed: () =>
                             ScaffoldMessenger.of(context).hideCurrentSnackBar(),
                       ),
