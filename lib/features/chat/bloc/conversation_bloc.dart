@@ -8,6 +8,7 @@ import 'package:sage_app/repository/chat_repository.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 part 'conversation_event.dart';
+
 part 'conversation_state.dart';
 
 class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
@@ -117,27 +118,11 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
 
   FutureOr<void> _updateRoomContents(
       UpdateRoomContents event, Emitter<ConversationState> emit) async {
-    // try {
-    //   // Create the FCM payload
-    //   final body = {
-    //     "registration_ids": [messageingToken],
-    //     "notification": {
-    //       "title": "New Message",
-    //       "body": 'This is FCM',
-    //       "sound": "default"
-    //     },
-    //     "data": {
-    //       "click_action": "FLUTTER_NOTIFICATION_CLICK",
-    //       "message": 'This is FCM',
-    //     }
-    //   };
-
-    //   // Send the FCM message using Firebase's FCM REST API
-    //   await FirebaseMessaging.instance.;
-
-    //   log("FCM message sent successfully");
-    // } catch (e) {
-    //   log("Error sending FCM message: $e");
-    // }
+    await FirebaseFirestore.instance
+        .collection("chat_room")
+        .doc(chatRoomId)
+        .update({
+      "last_message": event.msg,
+    });
   }
 }

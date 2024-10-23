@@ -79,12 +79,26 @@ class _AnonymousRequestsViewState extends State<AnonymousRequestsView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 70),
-                        Text(
-                          '  Anonymous Requests',
-                          style: TextStyle(
-                              fontSize: 28,
-                              color: Colors.grey.shade200,
-                              fontWeight: FontWeight.bold),
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: const Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              'Anonymous Requests',
+                              style: TextStyle(
+                                fontSize: 28,
+                                color: Colors.grey.shade200,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 16),
                         ListView.builder(

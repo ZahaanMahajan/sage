@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:sage_app/core/models/user.dart';
@@ -19,7 +20,7 @@ class TeacherView extends StatefulWidget {
 class _TeacherViewState extends State<TeacherView> {
   String formatTimestamp(Timestamp timestamp) {
     DateTime dateTime = timestamp.toDate();
-    return DateFormat('dd MMM yyyy, HH:mm').format(dateTime);
+    return DateFormat('dd MMM yy').format(dateTime);
   }
 
   @override
@@ -193,17 +194,48 @@ class _TeacherViewState extends State<TeacherView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.grey.shade900,
         onPressed: () {
-          FirebaseAuth.instance.signOut();
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => const InviteCodeScreen(),
+          showCupertinoDialog<void>(
+            context: context,
+            builder: (BuildContext context) => CupertinoAlertDialog(
+              title: const Text('Logout'),
+              content: const Text(
+                "Are you sure, you want to logout?",
               ),
-              (Route<dynamic> route) => false);
+              actions: <CupertinoDialogAction>[
+                CupertinoDialogAction(
+                  isDestructiveAction: true,
+                  onPressed: () {
+                    Navigator.pop(context);
+                    FirebaseAuth.instance.signOut();
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              const InviteCodeScreen(),
+                        ),
+                        (Route<dynamic> route) => false);
+                  },
+                  child: const Text(
+                    'Logout',
+                    style: TextStyle(color: Colors.teal),
+                  ),
+                ),
+                CupertinoDialogAction(
+                  isDestructiveAction: true,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Cancel'),
+                ),
+              ],
+            ),
+          );
         },
         child: const Icon(
           Icons.logout,
+          color: Colors.white,
         ),
       ),
     );
