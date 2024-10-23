@@ -9,6 +9,7 @@ import 'package:sage_app/features/chat/widgets/custom_chat_input.dart';
 
 class ChatView extends StatefulWidget {
   const ChatView({super.key, required this.chatRoomId, required this.token});
+
   final String chatRoomId;
   final String token;
 
@@ -83,9 +84,10 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
                         showUserAvatars: false,
                         onEndReached: _loadMoreMessages,
                         customBottomWidget: CustomChatInput(
-                          onSend: (types.PartialText message) =>
-                              cubit.add(SendMessage(message.text)),
-                        ),
+                            onSend: (types.PartialText message) {
+                          cubit.add(SendMessage(message.text));
+                          cubit.add(UpdateRoomContents(msg: message.text));
+                        }),
                         onSendPressed: (types.PartialText message) =>
                             cubit.add(SendMessage(message.text)),
                         bubbleBuilder: _bubbleBuilder,
@@ -174,17 +176,10 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
       Bubble(
         color: context.read<ConversationBloc>().user.id != message.author.id ||
                 message.type == types.MessageType.image
-            ? Colors.white
+            ? Colors.grey.shade100
             : Colors.grey.shade700,
         padding: const BubbleEdges.all(0),
-        margin: nextMessageInGroup
-            ? const BubbleEdges.symmetric(horizontal: 12)
-            : null,
-        nip: nextMessageInGroup
-            ? BubbleNip.no
-            : context.read<ConversationBloc>().user.id != message.author.id
-                ? BubbleNip.leftBottom
-                : BubbleNip.rightBottom,
+        nip: BubbleNip.no,
         child: child,
       );
 }

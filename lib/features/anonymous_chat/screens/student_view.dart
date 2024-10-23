@@ -1,10 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:sage_app/core/models/user.dart';
-import 'package:sage_app/core/constants/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sage_app/features/auth/invite/view/invite_code_screen.dart';
 import 'package:sage_app/features/chat/screens/chat.dart';
 import 'package:sage_app/features/anonymous_chat/models/chat_room_model.dart';
 
@@ -18,7 +15,7 @@ class StudentView extends StatefulWidget {
 class _StudentViewState extends State<StudentView> {
   String formatTimestamp(Timestamp timestamp) {
     DateTime dateTime = timestamp.toDate();
-    return DateFormat('dd MMM yyyy, HH:mm').format(dateTime);
+    return DateFormat('dd MMM yy').format(dateTime);
   }
 
   @override
@@ -28,8 +25,8 @@ class _StudentViewState extends State<StudentView> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.grey[900]!,
-              Colors.black,
+              Colors.teal.shade100,
+              Colors.white,
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -65,7 +62,7 @@ class _StudentViewState extends State<StudentView> {
                   '  Chats',
                   style: TextStyle(
                       fontSize: 36,
-                      color: Colors.grey.shade200,
+                      color: Colors.grey.shade900,
                       fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
@@ -89,13 +86,13 @@ class _StudentViewState extends State<StudentView> {
                           margin: const EdgeInsets.only(
                               bottom: 8, left: 8, right: 8),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.1),
+                            color: Colors.white70,
                             borderRadius: BorderRadius.circular(24),
                           ),
                           child: ListTile(
                             contentPadding: EdgeInsets.zero,
                             leading: const CircleAvatar(
-                              backgroundColor: btnBg,
+                              backgroundColor: Colors.teal,
                               backgroundImage:
                                   AssetImage('assets/images/sage.png'),
                               radius: 25,
@@ -104,7 +101,7 @@ class _StudentViewState extends State<StudentView> {
                               chatRoom.roomName,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: Colors.grey.shade200,
+                                color: Colors.grey.shade800,
                                 fontWeight: FontWeight.bold,
                                 overflow: TextOverflow.ellipsis,
                                 fontSize: 16,
@@ -168,20 +165,6 @@ class _StudentViewState extends State<StudentView> {
               ],
             );
           },
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          FirebaseAuth.instance.signOut();
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => const InviteCodeScreen(),
-              ),
-              (Route<dynamic> route) => false);
-        },
-        child: const Icon(
-          Icons.logout,
         ),
       ),
     );
