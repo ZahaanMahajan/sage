@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MindfullnessWidget extends StatelessWidget {
-  const MindfullnessWidget({
+class MindfulnessWidget extends StatelessWidget {
+  const MindfulnessWidget({
     required this.imagePath,
     required this.title,
     super.key,
@@ -24,7 +24,6 @@ class MindfullnessWidget extends StatelessWidget {
               bottom: 12,
             ),
             height: 120,
-            width: 180,
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
@@ -49,7 +48,6 @@ class MindfullnessWidget extends StatelessWidget {
           ),
           Container(
             height: 120,
-            width: 180,
             color: Colors.tealAccent.withOpacity(0.3),
             child: Center(
               child: Text(

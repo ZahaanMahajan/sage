@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sage_app/core/models/user.dart';
 import 'package:sage_app/core/utils/config.dart';
 import 'package:flutter/material.dart';
+import 'package:sage_app/features/mental_health_counsellors/mental_health_counsellors.dart';
 
 class Landing extends StatefulWidget {
   const Landing({super.key});
@@ -57,43 +58,44 @@ class _LandingState extends State<Landing> {
     return UserSession.instance.profession == 'teacher'
         ? const AnonymousChat(isStudent: false)
         : Scaffold(
-      backgroundColor: Colors.transparent,
-      extendBodyBehindAppBar: true,
-      extendBody: true,
-      body: PageView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: pageController,
-        onPageChanged: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
-        itemCount: 2,
-        itemBuilder: (context, index) {
-          var bottomNavScreens = [
-            const HomeScreen(),
-            const AnonymousChat(isStudent: true),
-          ];
-          return bottomNavScreens[index];
-        },
-      ),
-      bottomNavigationBar: NavigationBar(
-        height: 50,
-        elevation: 0,
-        selectedIndex: currentIndex,
-        onDestinationSelected: onTap,
-        destinations: _buildDestinationItems(),
-        indicatorColor: Colors.transparent,
-        backgroundColor: Colors.transparent,
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-      ),
-    );
+            backgroundColor: Colors.transparent,
+            extendBodyBehindAppBar: true,
+            extendBody: true,
+            body: PageView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  currentIndex = index;
+                });
+              },
+              itemCount: 3,
+              itemBuilder: (context, index) {
+                var bottomNavScreens = [
+                  const HomeScreen(),
+                  const AnonymousChat(isStudent: true),
+                  const MentalHealthCounsellorsView(),
+                ];
+                return bottomNavScreens[index];
+              },
+            ),
+            bottomNavigationBar: NavigationBar(
+              height: 50,
+              elevation: 0,
+              selectedIndex: currentIndex,
+              onDestinationSelected: onTap,
+              destinations: _buildDestinationItems(),
+              indicatorColor: Colors.transparent,
+              backgroundColor: Colors.transparent,
+              labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+            ),
+          );
   }
 
   List<NavigationDestination> _buildDestinationItems() {
     return List.generate(
-      2,
-          (index) {
+      3,
+      (index) {
         String outlineIcon;
         String filledIcon;
         String label;
@@ -108,6 +110,11 @@ class _LandingState extends State<Landing> {
             outlineIcon = StringManager.messagedOutlined;
             filledIcon = StringManager.messageFilled;
             label = "Chat";
+            break;
+          case 2:
+            outlineIcon = StringManager.doctorOutlineIcon;
+            filledIcon = StringManager.doctorFilledIcon;
+            label = "Doctor";
             break;
           default:
             throw Exception('Invalid index');

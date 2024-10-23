@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:sage_app/core/constants/string_manager.dart';
 import 'package:sage_app/core/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sage_app/features/chat/screens/chat.dart';
@@ -91,11 +92,13 @@ class _StudentViewState extends State<StudentView> {
                           ),
                           child: ListTile(
                             contentPadding: EdgeInsets.zero,
-                            leading: const CircleAvatar(
-                              backgroundColor: Colors.teal,
-                              backgroundImage:
-                                  AssetImage('assets/images/sage.png'),
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.white,
                               radius: 25,
+                              child: Image.asset(
+                                StringManager.personIcon,
+                                height: 32,
+                              ),
                             ),
                             title: Text(
                               chatRoom.roomName,

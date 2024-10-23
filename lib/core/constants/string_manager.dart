@@ -14,6 +14,8 @@ class StringManager {
   static const homeFilled = 'assets/images/home.png';
   static const messageFilled = 'assets/images/message.png';
   static const messagedOutlined = 'assets/images/message-outlined.png';
+  static const doctorOutlineIcon = 'assets/images/add-outlined.png';
+  static const doctorFilledIcon = 'assets/images/add-filled.png';
 
   static const spirituality = 'assets/images/spiritual.jpeg';
   static const breathing = 'assets/images/breathing.jpeg';

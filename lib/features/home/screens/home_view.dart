@@ -102,7 +102,7 @@ class HomeView extends StatelessWidget {
                             const SizedBox(height: 20),
                             const MoodTracker(),
                             Text(
-                              'Mindfullness',
+                              'Mindfulness',
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.teal.shade800,
@@ -113,28 +113,36 @@ class HomeView extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    MindfullnessWidget(
-                                      imagePath: StringManager.spirituality,
-                                      title: 'Spirituality',
+                                    Expanded(
+                                      child: MindfulnessWidget(
+                                        imagePath: StringManager.spirituality,
+                                        title: 'Spirituality',
+                                      ),
                                     ),
                                     SizedBox(width: 12),
-                                    MindfullnessWidget(
-                                      imagePath: StringManager.breathing,
-                                      title: 'Breathing',
+                                    Expanded(
+                                      child: MindfulnessWidget(
+                                        imagePath: StringManager.breathing,
+                                        title: 'Breathing',
+                                      ),
                                     ),
                                   ],
                                 ),
                                 SizedBox(height: 12),
                                 Row(
                                   children: [
-                                    MindfullnessWidget(
-                                      imagePath: StringManager.journaling,
-                                      title: 'Journaling',
+                                    Expanded(
+                                      child: MindfulnessWidget(
+                                        imagePath: StringManager.journaling,
+                                        title: 'Journaling',
+                                      ),
                                     ),
                                     SizedBox(width: 12),
-                                    MindfullnessWidget(
-                                      imagePath: StringManager.meditation,
-                                      title: 'Meditation',
+                                    Expanded(
+                                      child: MindfulnessWidget(
+                                        imagePath: StringManager.meditation,
+                                        title: 'Meditation',
+                                      ),
                                     ),
                                   ],
                                 ),

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:sage_app/core/constants/string_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MentalHealthCounsellorsView extends StatefulWidget {
@@ -30,12 +31,6 @@ class _MentalHealthCounsellorsViewState
 
     List<MentalHealthCouncellorsModel> list = [
       MentalHealthCouncellorsModel(
-        name: 'Wasim Kakroo',
-        exp: '10',
-        phone: '08825067196',
-        address: '21, Mehjoor Nagar Ram Bagh Bund',
-      ),
-      MentalHealthCouncellorsModel(
         name: 'Mr.Muzzafar Ahmad Ganaii',
         exp: '10',
         phone: '08082093082',
@@ -47,6 +42,12 @@ class _MentalHealthCounsellorsViewState
         exp: '10',
         phone: '08825067196',
         address: 'HMT Playground, HMT, Srinagar, Jammu and Kashmir 190012',
+      ),
+      MentalHealthCouncellorsModel(
+        name: 'Wasim Kakroo',
+        exp: '10',
+        phone: '08825067196',
+        address: '21, Mehjoor Nagar Ram Bagh Bund',
       ),
       MentalHealthCouncellorsModel(
         name: 'Dr.Syed Karrar',
@@ -97,13 +98,17 @@ class _MentalHealthCounsellorsViewState
                       ),
                       child: ListTile(
                         contentPadding: EdgeInsets.zero,
-                        leading: const CircleAvatar(
-                          backgroundColor: Colors.teal,
-                          backgroundImage: AssetImage('assets/images/sage.png'),
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.white,
                           radius: 25,
+                          child: Image.asset(
+                            StringManager.personIcon,
+                            height: 34,
+                            color: Colors.teal,
+                          ),
                         ),
                         title: Text(
-                          list[index].name,
+                          'Dr. ${list[index].name}',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: Colors.grey.shade800,
@@ -118,7 +123,7 @@ class _MentalHealthCounsellorsViewState
                             color: Colors.grey,
                             fontSize: 14,
                           ),
-                          maxLines: 1,
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                         trailing: const Padding(
