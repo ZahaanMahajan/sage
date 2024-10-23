@@ -4,6 +4,8 @@ abstract class ChatBotState {}
 
 class ChatInitialState extends ChatBotState {}
 
+class ChatLoadingState extends ChatBotState {}
+
 class ChatLoadedState extends ChatBotState {
   final List<ChatMessage> messages;
   final List<ChatUser> typingUsers;

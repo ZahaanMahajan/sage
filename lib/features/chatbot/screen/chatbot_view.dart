@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sage_app/core/widgets/floating_snack_bar.dart';
 import 'package:sage_app/features/chatbot/bloc/chatbot_bloc.dart';
 
 class ChatBotView extends StatelessWidget {
@@ -31,8 +30,7 @@ class ChatBotView extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(state.error)),
                   );
-                }
-                if (state is ChatLoadedState && state.showWarning) {
+                } else if (state is ChatLoadedState && state.showWarning) {
                   final chatBotBloc = context.read<ChatBotBloc>();
                   showCupertinoDialog<void>(
                     context: context,
@@ -50,14 +48,14 @@ class ChatBotView extends StatelessWidget {
                             onPressed: () {
                               chatBotBloc.add(RequestAnonymousChat());
                             },
-                            child: const Text('Yes'),
+                            child: const Text('Next'),
                           ),
                         ],
                       ),
                     ),
                   );
-                }
-                if (state is RequestAnonymousChatExists) {
+                } else if (state is RequestAnonymousChatExists ||
+                    state is RequestAnonymousChatSuccess) {
                   final chatBotBloc = context.read<ChatBotBloc>();
                   Navigator.pop(context);
                   showCupertinoDialog<void>(
@@ -67,35 +65,20 @@ class ChatBotView extends StatelessWidget {
                       child: CupertinoAlertDialog(
                         title: const Text('Note'),
                         content: const Text(
-                          "Your session will be saved, and you'll have the opportunity "
+                          "Your session will be deleted, and you'll have the opportunity "
                           "to chat anonymously with a teacher to share any issues you're "
-                          "facing after accepting your request",
+                          "facing after they accept your request",
                         ),
                         actions: <CupertinoDialogAction>[
                           CupertinoDialogAction(
                             isDestructiveAction: true,
                             onPressed: () {
                               Navigator.pop(context);
+                              chatBotBloc.add(StartNewSession());
                             },
-                            child: const Text('OK'),
+                            child: const Text('Start New Session'),
                           ),
                         ],
-                      ),
-                    ),
-                  );
-                }
-                if (state is RequestAnonymousChatSuccess) {
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: Colors.teal,
-                      behavior: SnackBarBehavior.floating,
-                      margin: const EdgeInsets.only(top: 20.0),
-                      content: FloatingSnackBar(
-                        message: "Your request for chat is recorded. "
-                            "The chat will appear once someone accepts.",
-                        onDismissed: () =>
-                            ScaffoldMessenger.of(context).hideCurrentSnackBar(),
                       ),
                     ),
                   );
