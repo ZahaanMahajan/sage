@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:sage_app/core/constants/string_manager.dart';
 import 'package:sage_app/core/models/user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sage_app/core/widgets/custom_appbar.dart';
 import 'package:sage_app/features/home/bloc/home_bloc.dart';
+import 'package:sage_app/features/home/widgets/mindfullness_widget.dart';
 import 'package:sage_app/features/home/widgets/mood_tracker.dart';
 import 'package:sage_app/features/chatbot/screen/chatbot_screen.dart';
 import 'package:sage_app/features/auth/invite/view/invite_code_screen.dart';
@@ -63,7 +65,6 @@ class HomeView extends StatelessWidget {
               icon: const Icon(Icons.logout_rounded),
             ),
           ),
-          /*drawer: const HomeDrawer(),*/
           body: Container(
             height: MediaQuery.of(context).size.height,
             padding: const EdgeInsets.only(
@@ -98,9 +99,48 @@ class HomeView extends StatelessWidget {
                                 fontSize: 28,
                               ),
                             ),
-                            const SizedBox(height: 30),
+                            const SizedBox(height: 20),
                             const MoodTracker(),
-                            const SizedBox(height: 100),
+                            Text(
+                              'Mindfullness',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.teal.shade800,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    MindfullnessWidget(
+                                      imagePath: StringManager.spirituality,
+                                      title: 'Spirituality',
+                                    ),
+                                    SizedBox(width: 12),
+                                    MindfullnessWidget(
+                                      imagePath: StringManager.breathing,
+                                      title: 'Breathing',
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 12),
+                                Row(
+                                  children: [
+                                    MindfullnessWidget(
+                                      imagePath: StringManager.journaling,
+                                      title: 'Journaling',
+                                    ),
+                                    SizedBox(width: 12),
+                                    MindfullnessWidget(
+                                      imagePath: StringManager.meditation,
+                                      title: 'Meditation',
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 200),
                           ],
                         ),
                       ),

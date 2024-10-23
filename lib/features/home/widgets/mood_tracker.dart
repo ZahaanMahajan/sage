@@ -73,7 +73,12 @@ class MoodTracker extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Container(
-                padding: const EdgeInsets.only(top: 24, left: 12, right: 36,bottom: 12,),
+                padding: const EdgeInsets.only(
+                  top: 24,
+                  left: 12,
+                  right: 36,
+                  bottom: 12,
+                ),
                 height: 260,
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -94,20 +99,23 @@ class MoodTracker extends StatelessWidget {
                     ]),
                 child: MoodChart(moodData: state.moodData),
               ),
-              const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: Center(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
+                  child: TextButton.icon(
+                    iconAlignment: IconAlignment.end,
+                    style: TextButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: Text(
-                      'Select Mood: ${state.selectedMood}',
-                      style: const TextStyle(color: Colors.teal),
+                    icon: const Icon(
+                      Icons.keyboard_arrow_down_outlined,
+                      color: Colors.teal,
+                    ),
+                    label: const Text(
+                      'Select Mood',
+                      style: TextStyle(color: Colors.teal),
                     ),
                     onPressed: () => _showCupertinoMoodPicker(context),
                   ),
