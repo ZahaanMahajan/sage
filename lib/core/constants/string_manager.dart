@@ -14,4 +14,9 @@ class StringManager {
   static const homeFilled = 'assets/images/home.png';
   static const messageFilled = 'assets/images/message.png';
   static const messagedOutlined = 'assets/images/message-outlined.png';
+
+  static const spirituality = 'assets/images/spiritual.jpeg';
+  static const breathing = 'assets/images/breathing.jpeg';
+  static const journaling = 'assets/images/journal.jpeg';
+  static const meditation = 'assets/images/meditation.jpeg';
 }
