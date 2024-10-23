@@ -11,3 +11,5 @@ class SendMessageEvent extends ChatBotEvent {
 }
 
 class RequestAnonymousChat extends ChatBotEvent {}
+
+class StartNewSession extends ChatBotEvent {}

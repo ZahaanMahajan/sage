@@ -24,6 +24,7 @@ class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
     on<ChatStartedEvent>(_onChatStarted);
     on<SendMessageEvent>(_onSendMessage);
     on<RequestAnonymousChat>(_requestAnonymousChat);
+    on<StartNewSession>(_startNewSession);
   }
 
   Future<void> _onChatStarted(
@@ -139,4 +140,42 @@ class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
         .get();
     return response.docs.isEmpty;
   }
+
+  FutureOr<void> _startNewSession(StartNewSession event, Emitter<ChatBotState> emit) async {
+    try {
+      // Emit a loading state if necessary
+      emit(ChatLoadingState());
+
+      // Fetch the chat messages from Firestore
+      final chatDocs = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.id)
+          .collection('chats')
+          .get();
+
+      // Delete each chat message document
+      for (var doc in chatDocs.docs) {
+        await doc.reference.delete();
+      }
+
+      // Clear the local messages list
+      messages.clear();
+
+      // Optionally, reinsert the initial message from Sage to start the new session
+      final initialMessage = ChatMessage(
+        user: sage,
+        createdAt: DateTime.now(),
+        text: "Hello there, I'm Sage. Welcome to a new session. How can I help you today?",
+      );
+      messages.insert(0, initialMessage);
+
+      // Emit the updated state with the new session messages
+      emit(ChatLoadedState(List.from(messages)));
+    } catch (e) {
+      // Handle any errors by emitting an error state
+      emit(ChatErrorState("Error starting new session: ${e.toString()}"));
+      emit(ChatLoadedState(List.from(messages)));
+    }
+  }
+
 }

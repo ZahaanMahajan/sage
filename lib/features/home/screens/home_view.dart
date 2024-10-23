@@ -112,9 +112,10 @@ class HomeView extends StatelessWidget {
                   left: 0,
                   right: 0,
                   child: Container(
+                    height: 48,
                     padding: const EdgeInsets.symmetric(horizontal: 24),
-                    height: 54,
-                    child: ElevatedButton(
+                    child: ElevatedButton.icon(
+                      iconAlignment: IconAlignment.end,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.teal,
                         shape: RoundedRectangleBorder(
@@ -130,32 +131,28 @@ class HomeView extends StatelessWidget {
                           ),
                         );
                       },
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Spacer(),
-                          Text(
-                            'Start a session with',
+                      label: RichText(
+                        text: const TextSpan(children: [
+                          TextSpan(
+                            text: 'Start a session with ',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 18,
                             ),
                           ),
-                          Text(
-                            " Sage",
+                          TextSpan(
+                            text: 'Sage',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                               fontSize: 20,
                             ),
                           ),
-                          SizedBox(width: 12),
-                          Icon(
-                            Icons.arrow_forward,
-                            color: Colors.white,
-                          ),
-                          Spacer(),
-                        ],
+                        ]),
+                      ),
+                      icon: const Icon(
+                        Icons.arrow_forward,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -168,4 +165,3 @@ class HomeView extends StatelessWidget {
     );
   }
 }
-
