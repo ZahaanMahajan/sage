@@ -1,14 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:sage_app/core/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sage_app/core/constants/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sage_app/features/anonymous_chat/screens/anonymous_requests.dart';
 import 'package:sage_app/features/chat/screens/chat.dart';
+import 'package:sage_app/core/constants/string_manager.dart';
 import 'package:sage_app/features/auth/invite/view/invite_code_screen.dart';
 import 'package:sage_app/features/anonymous_chat/models/chat_room_model.dart';
+import 'package:sage_app/features/anonymous_chat/screens/anonymous_requests.dart';
 
 class TeacherView extends StatefulWidget {
   const TeacherView({super.key});
@@ -117,11 +117,13 @@ class _TeacherViewState extends State<TeacherView> {
                           ),
                           child: ListTile(
                             contentPadding: EdgeInsets.zero,
-                            leading: const CircleAvatar(
-                              backgroundColor: btnBg,
-                              backgroundImage:
-                                  AssetImage('assets/images/sage.png'),
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.white,
                               radius: 25,
+                              child: Image.asset(
+                                StringManager.personIcon,
+                                height: 32,
+                              ),
                             ),
                             title: Text(
                               chatRoom.roomName,
