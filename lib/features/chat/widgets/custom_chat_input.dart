@@ -27,10 +27,6 @@ class CustomChatInputState extends State<CustomChatInput> {
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 20),
       child: Row(
         children: [
-          IconButton(
-            icon: const Icon(Icons.add_circle_outline),
-            onPressed: () {},
-          ),
           Expanded(
             child: TextField(
               controller: _controller,
@@ -38,7 +34,7 @@ class CustomChatInputState extends State<CustomChatInput> {
               decoration: InputDecoration(
                 hintText: 'Type something',
                 filled: true,
-                fillColor: Colors.grey[200],
+                fillColor: Colors.grey[300],
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
                   borderSide: BorderSide.none,
@@ -47,7 +43,11 @@ class CustomChatInputState extends State<CustomChatInput> {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.send),
+            icon: Icon(
+              Icons.send,
+              size: 30,
+              color: Colors.grey[300],
+            ),
             onPressed: _handleSendPressed,
           ),
         ],

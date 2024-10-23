@@ -1,8 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:sage_app/core/models/user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sage_app/core/constants/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sage_app/features/chat/screens/chat.dart';
 import 'package:sage_app/repository/anonymous_chat_repository.dart';
@@ -42,105 +42,133 @@ class _AnonymousRequestsViewState extends State<AnonymousRequestsView> {
           },
           builder: (context, state) {
             return Scaffold(
-              appBar: AppBar(
-                title: const Text(
-                  'Anonymous Requests',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+              body: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.grey[900]!,
+                      Colors.black,
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                   ),
                 ),
-              ),
-              body: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('chat_room')
-                    .where('accepted', isEqualTo: false)
-                    .where('gender',
-                        isEqualTo: UserSession.instance.gender ?? 'male')
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('chat_room')
+                      .where('accepted', isEqualTo: false)
+                      .where('gender',
+                          isEqualTo: UserSession.instance.gender ?? 'male')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                  if (snapshot.hasError) {
-                    return const Center(child: Text('Error loading chats.'));
-                  }
+                    if (snapshot.hasError) {
+                      return const Center(child: Text('Error loading chats.'));
+                    }
 
-                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Center(child: Text('No chats available.'));
-                  }
+                    if (!snapshot.hasData) {
+                      return const Center(child: Text('No chats available.'));
+                    }
 
-                  var chatRooms = snapshot.data!.docs;
+                    var chatRooms = snapshot.data!.docs;
 
-                  return ListView.builder(
-                    itemCount: chatRooms.length,
-                    itemBuilder: (context, index) {
-                      var chatRoom = ChatRoomModel.fromMap(
-                        chatRooms[index].data() as Map<String, dynamic>,
-                      );
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 70),
+                        Text(
+                          '  Anonymous Requests',
+                          style: TextStyle(
+                              fontSize: 28,
+                              color: Colors.grey.shade200,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        ListView.builder(
+                          padding: const EdgeInsets.all(0),
+                          shrinkWrap: true,
+                          itemCount: chatRooms.length,
+                          itemBuilder: (context, index) {
+                            var chatRoom = ChatRoomModel.fromMap(
+                              chatRooms[index].data() as Map<String, dynamic>,
+                            );
 
-                      return Stack(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 8),
-                            margin: const EdgeInsets.symmetric(horizontal: 6),
-                            decoration: BoxDecoration(
-                              color: btnBg.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              leading: const CircleAvatar(
-                                backgroundColor: btnBg,
-                                backgroundImage:
-                                    AssetImage('assets/images/sage.png'),
-                                radius: 25,
-                              ),
-                              title: Text(
-                                chatRoom.roomName,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              subtitle: Text(
-                                formatTimestamp(chatRoom.createdAt),
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              trailing: ElevatedButton(
-                                onPressed: () {
-                                  context
-                                      .read<AnonymousChatCubit>()
-                                      .setRequestFlagToTrue(
-                                          chatRoom.chatRoomId);
-                                },
-                                child: const Icon(Icons.done_outline_rounded),
-                              ),
-                              onTap: () {
-                                // Handle the details of the Query
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      content: displayFormattedSummary(
-                                        chatRoom.summary,
+                            return Stack(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 8),
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 6),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  child: ListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    leading: CircleAvatar(
+                                      backgroundColor: Colors.grey.shade200,
+                                      radius: 25,
+                                      child: const Icon(
+                                        CupertinoIcons.person_fill,
+                                        size: 30,
                                       ),
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
+                                    ),
+                                    title: Text(
+                                      chatRoom.roomName,
+                                      style: TextStyle(
+                                        color: Colors.grey.shade200,
+                                        fontWeight: FontWeight.bold,
+                                        overflow: TextOverflow.ellipsis,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      formatTimestamp(chatRoom.createdAt),
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    trailing: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          shape: const CircleBorder()),
+                                      onPressed: () {
+                                        context
+                                            .read<AnonymousChatCubit>()
+                                            .setRequestFlagToTrue(
+                                                chatRoom.chatRoomId);
+                                      },
+                                      child: const Icon(
+                                        Icons.done_outline_rounded,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      // Handle the details of the Query
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            content: displayFormattedSummary(
+                                              chatRoom.summary,
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ),
             );
           },
