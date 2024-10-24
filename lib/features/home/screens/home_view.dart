@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:sage_app/core/constants/string_manager.dart';
 import 'package:sage_app/core/models/user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sage_app/core/widgets/custom_appbar.dart';
+import 'package:sage_app/core/constants/string_manager.dart';
 import 'package:sage_app/features/home/bloc/home_bloc.dart';
-import 'package:sage_app/features/home/widgets/mindfullness_widget.dart';
 import 'package:sage_app/features/home/widgets/mood_tracker.dart';
 import 'package:sage_app/features/chatbot/screen/chatbot_screen.dart';
+import 'package:sage_app/features/home/widgets/mindfullness_details.dart';
+import 'package:sage_app/features/home/widgets/mindfullness_widget.dart';
 import 'package:sage_app/features/auth/invite/view/invite_code_screen.dart';
 
 class HomeView extends StatelessWidget {
@@ -109,39 +110,103 @@ class HomeView extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const Column(
+                            Column(
                               children: [
                                 Row(
                                   children: [
                                     Expanded(
-                                      child: MindfulnessWidget(
-                                        imagePath: StringManager.spirituality,
-                                        title: 'Spirituality',
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const MindfullnessDetails(
+                                                title: 'Spirituality',
+                                                description: StringManager
+                                                    .spiritualityGuidance,
+                                                imagePath:
+                                                    StringManager.spirituality,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: const MindfulnessWidget(
+                                          imagePath: StringManager.spirituality,
+                                          title: 'Spirituality',
+                                        ),
                                       ),
                                     ),
-                                    SizedBox(width: 12),
+                                    const SizedBox(width: 12),
                                     Expanded(
-                                      child: MindfulnessWidget(
-                                        imagePath: StringManager.breathing,
-                                        title: 'Breathing',
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const MindfullnessDetails(
+                                                title: 'Breathing',
+                                                description: StringManager
+                                                    .breathingDescription,
+                                                imagePath:
+                                                    StringManager.breathing,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: const MindfulnessWidget(
+                                          imagePath: StringManager.breathing,
+                                          title: 'Breathing',
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 12),
+                                const SizedBox(height: 12),
                                 Row(
                                   children: [
                                     Expanded(
-                                      child: MindfulnessWidget(
-                                        imagePath: StringManager.journaling,
-                                        title: 'Journaling',
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const MindfullnessDetails(
+                                                title: 'Journaling',
+                                                description: StringManager
+                                                    .journalingGuidance,
+                                                imagePath:
+                                                    StringManager.journaling,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: const MindfulnessWidget(
+                                          imagePath: StringManager.journaling,
+                                          title: 'Journaling',
+                                        ),
                                       ),
                                     ),
-                                    SizedBox(width: 12),
+                                    const SizedBox(width: 12),
                                     Expanded(
-                                      child: MindfulnessWidget(
-                                        imagePath: StringManager.meditation,
-                                        title: 'Meditation',
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const MindfullnessDetails(
+                                                title: 'Meditation',
+                                                description: StringManager
+                                                    .meditationGuidance,
+                                                imagePath:
+                                                    StringManager.meditation,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: const MindfulnessWidget(
+                                          imagePath: StringManager.meditation,
+                                          title: 'Meditation',
+                                        ),
                                       ),
                                     ),
                                   ],
